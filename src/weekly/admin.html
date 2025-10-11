@@ -15,7 +15,152 @@
     <!-- TODO: Add a title, e.g., "Manage Weekly Breakdown". -->
     <title>Manage Weekly Breakdown</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
-    <style> </style>
+    <style>
+    body{
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #1e3a8a;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/*  Form Styling  */
+form fieldset {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+form legend {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+form input:focus, form textarea:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 5px rgba(30, 58, 138, 0.3);
+}
+
+button#add-week {
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button#add-week:hover {
+    background-color: #138a3f;
+}
+
+/*  Table Styling  */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #030000;
+}
+
+th {
+    background-color: #1e3a8a;
+    color: white;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s;
+}
+
+/*  Action Buttons  */
+.action-button {
+    display: inline-block;
+    padding: 7px 14px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+    transition: all 0.2s;
+}
+
+.action-button:first-child {
+    background-color: #fbbf24; 
+}
+
+.action-button:first-child:hover {
+    background-color: #f59e0b;
+}
+
+.action-button:last-child {
+    background-color: #dc2626; 
+}
+
+.action-button:last-child:hover {
+    background-color: #b91c1c;
+}
+
+/*  Responsive  */
+@media (max-width: 600px) {
+    form, main {
+        padding: 15px;
+    }
+
+    th, td {
+        padding: 10px 8px;
+    }
+
+    .action-button {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
+    </style>
 </head>
 <body>
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Weekly Breakdown". -->
@@ -53,13 +198,13 @@
                          - label 'for': "week-description"
                          - textarea 'id': "week-description", rows="5" -->
           <label for="week-description">Description and Notes</label><br>
-          <textarea id="week-description" rows="5"></textarea><br><br>
+          <textarea id="week-description" rows="5" placeholder="Enter description and notes here"></textarea><br><br>
                     
                     <!-- TODO: Add a 'label' and 'textarea' for links to exercises or resources (one link per line).
                          - label 'for': "week-links"
                          - textarea 'id': "week-links", rows="3" -->
-          <label for="week-links">links to exercises/resources (one link per line)</label><br>
-          <textarea id="week-links" rows="3"></textarea><br><br>
+          <label for="week-links">Links to Exercises/Resources</label><br>
+          <textarea id="week-links" rows="3" placeholder="Enter one link per line..."></textarea><br><br>
 
                     <!-- TODO: Add a 'button' to submit the form.
                          - id="add-week", type="submit", Text: "Add Week" -->
@@ -77,7 +222,7 @@
             <!-- TODO: Add a sub-heading ('h2') "Current Weekly Breakdown". -->
        <h2>Current Weekly Breakdown</h2>
             <!-- TODO: Create a 'table' with id "weeks-table". -->
-       <table id="weeks-table" border="1" cellpadding="8" cellspacing="0">
+       <table id="weeks-table">
                 <!-- TODO: Create a 'thead' and a 'tr' inside it. -->
        <thead> 
           <tr>
