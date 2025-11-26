@@ -9,8 +9,10 @@
 ## A table indicating which student was responsible for which task.
 | Student Name | Task / Responsibility |
 |--------------|---------------------|
-| Fatima Ahmed    | Task 3: Weekly Breakdown | 
-|      |    | 
-|      |    |
+|     | Task 1: Homepage, Admin Portal & User Management | 
+|      | Task 2: Course Resources | 
+| Fatima Ahmed | Task 3: Weekly Breakdown |
+|      | Task 4: Assignments | 
+|      | Task 5: General Discussion Boards | 
 
 ## A link to your live, hosted application on Replit.
