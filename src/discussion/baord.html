@@ -1,6 +1,3 @@
-<!--
-  Requirement: Create the General Discussion Board
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>General Discussion Board</title>
 
-<!-- Bootstrap -->
+<!-- Bootstrap (grid only – style removed) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
+<!-- Custom Dark Theme -->
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-light">
+
+<body>
 
 <div class="container my-5">
 
     <!-- HEADER -->
     <header>
-        <h1 class="text-center fw-bold display-5 mb-4">General Discussion Board</h1>
+        <h1 class="text-center fw-bold">General Discussion Board</h1>
     </header>
 
     <!-- MAIN -->
@@ -30,108 +26,79 @@
 
         <!-- NEW TOPIC FORM -->
         <section class="mb-5">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="mb-3">Start a New Topic</h2>
+            <h2>Start a New Topic</h2>
 
-                    <form id="new-topic-form" action="#">
-                        <fieldset>
-                            <legend class="fw-semibold mb-3">New Topic Details</legend>
+            <form id="new-topic-form">
+                <fieldset>
+                    <legend>New Topic Details</legend>
 
-                            <div class="mb-3">
-                                <label for="topic-subject" class="form-label">Subject:</label>
-                                <input id="topic-subject" name="topic-subject" type="text" class="form-control" required>
-                            </div>
+                    <div class="mb-3">
+                        <label for="topic-subject">Subject:</label>
+                        <input id="topic-subject" name="topic-subject" type="text" required>
+                    </div>
 
-                            <div class="mb-3">
-                                <label for="topic-message" class="form-label">Message:</label>
-                                <textarea id="topic-message" rows="6" class="form-control" required></textarea>
-                            </div>
+                    <div class="mb-3">
+                        <label for="topic-message">Message:</label>
+                        <textarea id="topic-message" rows="6" required></textarea>
+                    </div>
 
-                            <button id="create-topic" type="submit" class="btn btn-primary px-4">Create Topic</button>
-                        </fieldset>
-                    </form>
-
-                </div>
-            </div>
+                    <button id="create-topic" type="submit" class="edit-button">Create Topic</button>
+                </fieldset>
+            </form>
         </section>
 
 
         <!-- ALL TOPICS -->
         <section class="mb-5">
-            <h2 class="mb-3">All Topics</h2>
+            <h2>All Topics</h2>
 
             <div id="topic-list-container" class="topic-list">
 
                 <!-- TOPIC 1 -->
-                <article class="topic mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
+                <article class="topic">
+                    <h3>
+                        <a href="topic-detail.html">Question about CSS Flexbox</a>
+                    </h3>
 
-                            <h3>
-                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
-                                    Question about CSS Flexbox
-                                </a>
-                            </h3>
+                    <footer>
+                        Posted by: Al-Anod Ali on 2025-11-28
+                    </footer>
 
-                            <footer class="text-muted small mb-2">
-                                Posted by: Al-Anod Ali on 2025-11-28
-                            </footer>
-
-                            <div class="topic-actions d-flex gap-2">
-                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
-                            </div>
-
-                        </div>
+                    <div class="topic-actions">
+                        <a href="edit-topic.html" class="edit-button">Edit</a>
+                        <a href="#" class="delete-button">Delete</a>
                     </div>
                 </article>
 
                 <!-- TOPIC 2 -->
-                <article class="topic mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
+                <article class="topic">
+                    <h3>
+                        <a href="topic-detail.html">How to center items using CSS Flexbox?</a>
+                    </h3>
 
-                            <h3>
-                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
-                                    How to center items using CSS Flexbox?
-                                </a>
-                            </h3>
+                    <footer>
+                        Posted by: Mona on 2025-11-20
+                    </footer>
 
-                            <footer class="text-muted small mb-2">
-                                Posted by: Mona on 2025-11-20
-                            </footer>
-
-                            <div class="topic-actions d-flex gap-2">
-                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
-                            </div>
-
-                        </div>
+                    <div class="topic-actions">
+                        <a href="edit-topic.html" class="edit-button">Edit</a>
+                        <a href="#" class="delete-button">Delete</a>
                     </div>
                 </article>
 
                 <!-- TOPIC 3 -->
-                <article class="topic mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
+                <article class="topic">
+                    <h3>
+                        <a href="topic-detail.html">Best practices for responsive design?</a>
+                    </h3>
 
-                            <h3>
-                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
-                                    Best practices for responsive design?
-                                </a>
-                            </h3>
+                    <footer>
+                        Posted by: Huda Ali on 2025-11-15
+                    </footer>
 
-                            <footer class="text-muted small mb-2">
-                                Posted by: Huda Ali on 2025-11-15
-                            </footer>
-
-                            <div class="topic-actions d-flex gap-2">
-                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
-                            </div>
-
-                        </div>
+                    <div class="topic-actions">
+                        <a href="edit-topic.html" class="edit-button">Edit</a>
+                        <a href="#" class="delete-button">Delete</a>
                     </div>
                 </article>
 
