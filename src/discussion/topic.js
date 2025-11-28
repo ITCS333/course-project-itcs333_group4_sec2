@@ -20,8 +20,15 @@
 let currentTopicId = null;
 let currentReplies = []; // Will hold replies for *this* topic
 
+
 // --- Element Selections ---
 // TODO: Select all the elements you added IDs for in step 2.
+const topicSubject = document.getElementById('topic-subject');
+const opMessage = document.getElementById('op-message');
+const opFooter = document.getElementById('op-footer');
+const replyListContainer = document.getElementById('reply-list-container');
+const replyForm = document.getElementById('reply-form');
+const newReplyText = document.getElementById('new-reply');
 
 // --- Functions ---
 
@@ -33,7 +40,8 @@ let currentReplies = []; // Will hold replies for *this* topic
  * 3. Return the id.
  */
 function getTopicIdFromURL() {
-  // ... your implementation here ...
+const params= new URLSearchParams(window.location.search);
+return params.get('id');  
 }
 
 /**
@@ -46,7 +54,9 @@ function getTopicIdFromURL() {
  * 4. (Optional) Add a "Delete" button with `data-id="${topic.id}"` to the OP.
  */
 function renderOriginalPost(topic) {
-  // ... your implementation here ...
+  topicSubject.textContent = topic.subject;
+  opMessage.textContent = topic.message;
+  opFooter.textContent = `Posted by: ${topic.author} on ${topic.date}`;
 }
 
 /**
@@ -58,7 +68,28 @@ function renderOriginalPost(topic) {
  * - Include a "Delete" button with class "delete-reply-btn" and `data-id="${id}"`.
  */
 function createReplyArticle(reply) {
-  // ... your implementation here ...
+  const article = document.createElement('article');
+  article.classList.add('reply');
+
+  const p = document.createElement('p');
+  p.textContent = reply.text;
+
+  const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${reply.author} on ${reply.date}`;
+
+  const actions= document.createElement('div');
+  actions.classList.add('reply-actions');
+
+const deleteBtn = document.createElement('button');
+deleteBtn.textContent = 'Delete';
+deleteBtn.classList.add('delete-reply-btn');
+deleteBtn.dataset.id = reply.id;
+
+  actions.appendChild(deleteBtn);
+  article.appendChild(p);
+  article.appendChild(footer);
+  article.appendChild(actions);
+  return article;
 }
 
 /**
@@ -70,7 +101,13 @@ function createReplyArticle(reply) {
  * append the resulting <article> to `replyListContainer`.
  */
 function renderReplies() {
-  // ... your implementation here ...
+
+replyListContainer.innerHTML = '';
+
+currentReplies.forEach(reply => {
+  const replyArticle = createReplyArticle(reply);
+  replyListContainer.appendChild(replyArticle); });
+
 }
 
 /**
@@ -92,7 +129,23 @@ function renderReplies() {
  * 7. Clear the `newReplyText` textarea.
  */
 function handleAddReply(event) {
-  // ... your implementation here ...
+
+event.preventDefault();
+
+const text = newReplyText.value.trim();
+if (text === '') 
+  return;
+
+  const newReply = {
+    id: `reply_${Date.now()}`,
+    author: 'Student',
+    date: new Date().toISOString().split('T')[0],
+    text: text
+  };
+
+  currentReplies.push(newReply);
+  renderReplies();
+  newReplyText.value = ''; 
 }
 
 /**
@@ -106,7 +159,11 @@ function handleAddReply(event) {
  * 4. Call `renderReplies()` to refresh the list.
  */
 function handleReplyListClick(event) {
-  // ... your implementation here ...
+  if (event.target.classList.contains('delete-reply-btn')) {
+    const id = event.target.dataset.id;
+    currentReplies = currentReplies.filter(reply => reply.id !== id);
+    renderReplies();
+  }
 }
 
 /**
@@ -128,8 +185,38 @@ function handleReplyListClick(event) {
  * 8. If the topic is not found, display an error in `topicSubject`.
  */
 async function initializePage() {
-  // ... your implementation here ...
+  currentTopicId = getTopicIdFromURL();
+
+  if (!currentTopicId) {
+    topicSubject.textContent = "Topic not found.";
+    return;
+  }
+
+  const [topicResponse, repliesResponse] = await Promise.all([
+    fetch('topics.json'),
+    fetch('replies.json')
+  ]); 
+
+
+const topicsData = await topicResponse.json();
+const repliesData = await repliesResponse.json();
+
+const topic = topicsData.find(t => t.id === currentTopicId);
+currentReplies = repliesData[currentTopicId] || [];
+
+
+if (!topic) {
+  topicSubject.textContent = "Topic not found.";
+  return;
 }
+
+renderOriginalPost(topic);
+renderReplies();
+
+replyForm.addEventListener('submit', handleAddReply);
+replyListContainer.addEventListener('click', handleReplyListClick);
+}
+
 
 // --- Initial Page Load ---
 initializePage();
