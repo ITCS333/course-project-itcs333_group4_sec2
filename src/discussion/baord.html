@@ -1,151 +1,147 @@
 <!--
   Requirement: Create the General Discussion Board
-
-  Instructions:
-  This page will list all discussion topics and include a form to create a new one.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
-<meta charset="UTF-8">
-    
-    <!-- TODO: Add the responsive 'viewport' meta tag. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Discussion Board</title>
 
-    <!-- TODO: Add a title, e.g., "Discussion Board". -->
-    <title>General Discussion Board</title>
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- TODO: Link to your CSS framework or stylesheet. -->
-   <!-- Bootstrap -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container mt-4">
+<div class="container my-5">
 
-  
-    <!-- TODO: Create a 'header' with a main heading ('h1') "General Discussion Board". -->
+    <!-- HEADER -->
     <header>
-        <h1 class="text-center fw-bold display-5" >General Discussion Board</h1>
+        <h1 class="text-center fw-bold display-5 mb-4">General Discussion Board</h1>
     </header>
-    <!-- TODO: Create the 'main' content area. -->
+
+    <!-- MAIN -->
     <main>
 
-        <!-- Section 1: Create a New Topic -->
-        <!-- TODO: Create a 'section' for the "new topic" form. -->
-         <section>
-        
-            <!-- TODO: Add a sub-heading ('h2') "Start a New Topic". -->
-            <h2>Start a New Topic</h2>
-
-            <!-- TODO: Create a 'form' with an id "new-topic-form". Action can be '#'. -->
-            <form id="new-topic-form" action="#">
-                <!-- TODO: Use a 'fieldset' to group the form controls. -->
-                <fieldset>
-                    <!-- TODO: Add a 'legend', e.g., "New Topic Details". -->
-                    <legend>New Topic Details</legend>
-
-                    <!-- TODO: Add a 'label' and 'input' for the topic subject.
-                         - label 'for': "topic-subject"
-                         - input 'id': "topic-subject", type="text", required -->
-                  <div class="mb-3" >
-                    <label for="topic-subject">Subject:</label>
-                    <input id="topic-subject" name="topic-subject" type="text" required>
-                  </div>
-
-                    <!-- TODO: Add a 'label' and 'textarea' for the main message.
-                         - label 'for': "topic-message"
-                         - textarea 'id': "topic-message", rows="6", required -->
-                    <div class="mb-3" >
-                    <label for="topic-message">Message:</label>
-                    <textarea id="topic-message" rows="6" required></textarea>
-                    </div>
-                    <!-- TODO: Add a 'button' to submit the form.
-                         - id="create-topic", type="submit", Text: "Create Topic" -->
-                    <button id="create-topic" type="submit">Create Topic</button>
-                <!-- End of fieldset. -->
-                </fieldset>
-            <!-- End of form. -->
-            </form>
-        <!-- End of form section. -->
-        </section>
-
-
-        <!-- Section 2: Existing Topics -->
-        <!-- TODO: Create a 'section' to display the list of current topics. -->
+        <!-- NEW TOPIC FORM -->
         <section class="mb-5">
-            <!-- TODO: Add a sub-heading ('h2') "All Topics". -->
-            <h2>All Topics</h2>
-            
-            <!-- TODO: Add a container (like a 'div') to hold the list of topics. -->
-            <div id="topic-list-container" class="topic-list">
-                <!-- TODO: Add 2-3 dummy topics using the structure below. -->
-                <!-- Example Topic 1: -->
-                <!-- TODO: Use an 'article' for each topic. -->
-                <article class="topic">
-                    <!-- TODO: Add a heading ('h3') containing an anchor tag ('a') linking to the detail page.
-                         - The link's 'href' can be "topic-detail.html" for now.
-                         - The link text should be a dummy topic title, e.g., "Question about CSS Flexbox". -->
-                    <h3><a href="topic-detail.html">Question about CSS Flexbox</a></h3>
-                    
-                    <!-- TODO: Use a 'footer' element for metadata. -->
-                    <footer>
-                        <!-- TODO: Add text like "Posted by: Student Name on YYYY-MM-DD". -->
-                        <p>Posted by: Al-Anod Ali on 2025-11-28</p>
-                    <!-- End of footer. -->
-                    </footer>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="mb-3">Start a New Topic</h2>
 
-                    <!-- TODO: Add a container (e.g., a 'div') for action buttons. -->
-                    <div class="topic-actions">
-                        <!-- TODO: Add an "Edit" button/link. -->
-                        <a href="edit-topic.html" class="edit-button">Edit</a>
-                        <!-- TODO: Add a "Delete" button/link. -->
-                        <a href="#" class="delete-button">Delete</a>
-                        <!-- NOTE: For the exercise, you can add these for all topics. In a real app,
-                             these buttons would only be visible to the topic's author or the admin. -->
-                    <!-- End of actions container. -->
-                    </div>
-                <!-- End of article. -->
-                </article>
-                <!-- Example Topic 2: -->
-                <article class="topic">
-                    <h3><a href="topic-detail.html">How to center items using CSS Flexbox?</a></h3>
-                    <footer>
-                        <p>Posted by: Mona on 2025-11-20</p>
-                    </footer>
-                    <div class="topic-actions">
-                        <a href="edit-topic.html" class="edit-button">Edit</a>
-                        <a href="#" class="delete-button">Delete</a>
-                    </div>
-                </article>
-                <!-- Example Topic 3: -->   
-                <article class="topic">
-                    <h3><a href="topic-detail.html">Best practices for responsive design?</a></h3>
-                    <footer>
-                        <p>Posted by: Huda Ali on 2025-11-15</p>
-                    </footer>
-                    <div class="topic-actions">
-                        <a href="edit-topic.html" class="edit-button">Edit</a>
-                        <a href="#" class="delete-button">Delete</a>
-                    </div>
-                </article>
-            <!-- End of topics container. -->
+                    <form id="new-topic-form" action="#">
+                        <fieldset>
+                            <legend class="fw-semibold mb-3">New Topic Details</legend>
+
+                            <div class="mb-3">
+                                <label for="topic-subject" class="form-label">Subject:</label>
+                                <input id="topic-subject" name="topic-subject" type="text" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="topic-message" class="form-label">Message:</label>
+                                <textarea id="topic-message" rows="6" class="form-control" required></textarea>
+                            </div>
+
+                            <button id="create-topic" type="submit" class="btn btn-primary px-4">Create Topic</button>
+                        </fieldset>
+                    </form>
+
+                </div>
             </div>
-        <!-- End of list section. -->
         </section>
 
-    <!-- End of main. -->
+
+        <!-- ALL TOPICS -->
+        <section class="mb-5">
+            <h2 class="mb-3">All Topics</h2>
+
+            <div id="topic-list-container" class="topic-list">
+
+                <!-- TOPIC 1 -->
+                <article class="topic mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+
+                            <h3>
+                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
+                                    Question about CSS Flexbox
+                                </a>
+                            </h3>
+
+                            <footer class="text-muted small mb-2">
+                                Posted by: Al-Anod Ali on 2025-11-28
+                            </footer>
+
+                            <div class="topic-actions d-flex gap-2">
+                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </article>
+
+                <!-- TOPIC 2 -->
+                <article class="topic mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+
+                            <h3>
+                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
+                                    How to center items using CSS Flexbox?
+                                </a>
+                            </h3>
+
+                            <footer class="text-muted small mb-2">
+                                Posted by: Mona on 2025-11-20
+                            </footer>
+
+                            <div class="topic-actions d-flex gap-2">
+                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </article>
+
+                <!-- TOPIC 3 -->
+                <article class="topic mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+
+                            <h3>
+                                <a class="text-decoration-none fw-semibold" href="topic-detail.html">
+                                    Best practices for responsive design?
+                                </a>
+                            </h3>
+
+                            <footer class="text-muted small mb-2">
+                                Posted by: Huda Ali on 2025-11-15
+                            </footer>
+
+                            <div class="topic-actions d-flex gap-2">
+                                <a href="edit-topic.html" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
     </main>
+
     <script src="board.js" defer></script>
 </div>
+
 </body>
 </html>
