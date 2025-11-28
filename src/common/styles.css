@@ -1,142 +1,170 @@
-/* ==== GLOBAL PAGE STYLE ==== */
+/* ===== GLOBAL PAGE STYLING ===== */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #eef2f7;
-  background-image: url('https://i.imgur.com/1QeZ6Pd.png'); /* subtle coding pattern */
+  background-color: #f2f4f8;
+  margin: 0;
+  padding-bottom: 50px;
+  background-image: url("https://images.unsplash.com/photo-1527430253228-e93688616381?auto=format&fit=crop&w=1200&q=60");
   background-size: cover;
   background-attachment: fixed;
-  padding-bottom: 50px;
+  background-repeat: no-repeat;
 }
 
-/* ==== HEADER ==== */
+/* ===== HEADER ===== */
 header {
-  background: linear-gradient(135deg, #0d1b2a, #1b263b);
-  color: white;
+  background: rgba(13, 27, 42, 0.92);
+  color: #fff;
   padding: 45px 20px;
   text-align: center;
-  border-radius: 0 0 25px 25px;
-  margin-bottom: 30px;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 35px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.25);
 }
 
 header h1 {
   font-weight: 700;
-  letter-spacing: 1px;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.35);
 }
 
-/* ==== SECTION TITLES ==== */
+/* ===== SECTION TITLES ===== */
 h2 {
-  font-weight: 600;
+  font-size: 1.6rem;
   margin-bottom: 20px;
+  font-weight: 600;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 h2::before {
-  content: "💬";
-  margin-right: 10px;
-  font-size: 1.5rem;
+  content: "";
+  background-image: url("https://cdn-icons-png.flaticon.com/512/2985/2985150.png");
+  width: 28px;
+  height: 28px;
+  background-size: cover;
 }
 
-/* ==== TOPIC CARD ==== */
-.topic, .reply {
-  background: white;
+/* ===== TOPIC / REPLY CARDS ===== */
+.topic, 
+.reply {
+  background: #fff;
   padding: 25px;
-  border-radius: 16px;
-  margin-bottom: 20px;
+  border-radius: 18px;
+  margin-bottom: 22px;
   border-left: 6px solid #4a90e2;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
   position: relative;
   overflow: hidden;
 }
 
-/* coding illustration image */
+/* TOPIC illustration */
 .topic::after {
   content: "";
-  background-image: url('https://cdn-icons-png.flaticon.com/512/2881/2881142.png');
-  background-size: 80px;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/1995/1995574.png");
+  background-size: 110px;
   background-repeat: no-repeat;
-  opacity: 0.08;
-  width: 120px;
-  height: 120px;
+  opacity: 0.09;
+  width: 150px;
+  height: 150px;
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 15px;
+  bottom: 15px;
 }
 
+/* REPLY illustration */
 .reply::after {
   content: "";
-  background-image: url('https://cdn-icons-png.flaticon.com/512/3983/3983877.png');
-  background-size: 70px;
-  opacity: 0.08;
-  width: 100px;
-  height: 100px;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/2462/2462719.png");
+  background-size: 100px;
+  opacity: 0.09;
+  width: 140px;
+  height: 140px;
   position: absolute;
   right: 10px;
   bottom: 10px;
 }
 
-/* ==== FORMS ==== */
+/* ===== FIELDS & FORMS ===== */
 fieldset {
-  background: white;
+  background: #fff;
   padding: 25px;
   border-radius: 16px;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+legend {
+  font-weight: 600;
+  color: #1b263b;
 }
 
 input, textarea {
   width: 100%;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   margin-top: 5px;
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 15px;
+  background-color: #fdfdfd;
+  transition: 0.2s ease-in-out;
 }
 
-textarea {
-  resize: vertical;
+input:focus,
+textarea:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 6px rgba(74,144,226,0.4);
 }
 
-/* ==== BUTTONS ==== */
+/* ===== BUTTONS ===== */
 button,
 .edit-button,
 .delete-button {
-  padding: 10px 18px;
+  padding: 10px 16px;
   border-radius: 10px;
-  font-weight: 500;
-  transition: 0.2s ease-in-out;
   border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 button:hover,
 .edit-button:hover,
 .delete-button:hover {
-  transform: scale(1.08);
+  transform: scale(1.07);
 }
 
-/* edit */
+button {
+  background-color: #1b63c3;
+  color: #fff;
+}
+
 .edit-button {
   background-color: #4a90e2;
   color: white;
   text-decoration: none;
 }
 
-/* delete */
 .delete-button {
-  background-color: #c0392b;
+  background-color: #d64545;
   color: white;
   text-decoration: none;
 }
 
-/* reply delete */
+/* reply-only delete button */
 .reply-actions button {
-  background-color: #c0392b;
-  color: white;
+  background-color: #d64545;
 }
 
-/* ==== PAGE SPACING ==== */
-.container {
-  margin-top: 20px;
+/* ===== TOPIC LINKS ===== */
+.topic h3 a {
+  color: #0d1b2a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.topic h3 a:hover {
+  color: #4a90e2;
+  text-decoration: underline;
 }
