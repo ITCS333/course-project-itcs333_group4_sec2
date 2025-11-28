@@ -30,9 +30,12 @@
 </head>
 <body>
 
+<div class="container mt-4">
+
+  
     <!-- TODO: Create a 'header' with a main heading ('h1') "General Discussion Board". -->
     <header>
-        <h1>General Discussion Board</h1>
+        <h1 class="text-center fw-bold display-5" >General Discussion Board</h1>
     </header>
     <!-- TODO: Create the 'main' content area. -->
     <main>
@@ -54,16 +57,18 @@
                     <!-- TODO: Add a 'label' and 'input' for the topic subject.
                          - label 'for': "topic-subject"
                          - input 'id': "topic-subject", type="text", required -->
+                  <div class="mb-3" >
                     <label for="topic-subject">Subject:</label>
                     <input id="topic-subject" name="topic-subject" type="text" required>
-                    
+                  </div>
 
                     <!-- TODO: Add a 'label' and 'textarea' for the main message.
                          - label 'for': "topic-message"
                          - textarea 'id': "topic-message", rows="6", required -->
+                    <div class="mb-3" >
                     <label for="topic-message">Message:</label>
                     <textarea id="topic-message" rows="6" required></textarea>
-
+                    </div>
                     <!-- TODO: Add a 'button' to submit the form.
                          - id="create-topic", type="submit", Text: "Create Topic" -->
                     <button id="create-topic" type="submit">Create Topic</button>
@@ -77,7 +82,7 @@
 
         <!-- Section 2: Existing Topics -->
         <!-- TODO: Create a 'section' to display the list of current topics. -->
-        <section>
+        <section class="mb-5">
             <!-- TODO: Add a sub-heading ('h2') "All Topics". -->
             <h2>All Topics</h2>
             
@@ -141,5 +146,6 @@
     <!-- End of main. -->
     </main>
     <script src="board.js" defer></script>
+</div>
 </body>
 </html>
