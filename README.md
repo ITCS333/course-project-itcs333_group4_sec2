@@ -4,7 +4,7 @@
 
 ## The names and student IDs of all team members.
 1. Fatima Ahmed Ahmed Mohsen - 202209641
-2. 
+2. Al-Anood Ali Alqadhi - 202208068
 
 ## A table indicating which student was responsible for which task.
 | Student Name | Task / Responsibility |
@@ -13,6 +13,6 @@
 |      | **Task 2:** Course Resources | 
 | Fatima Ahmed | **Task 3:** Weekly Breakdown |
 |      | **Task 4:** Assignments | 
-|      | **Task 5:** General Discussion Boards | 
+|  Al-Anood Ali AlQadhi    | **Task 5:** General Discussion Boards | 
 
 ## A link to your live, hosted application on Replit.
