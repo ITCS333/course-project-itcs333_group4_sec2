@@ -1,69 +1,86 @@
-/* ===== GLOBAL PAGE STYLING ===== */
+/* ===========================
+   GLOBAL PAGE DESIGN - DARK THEME
+   =========================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f2f4f8;
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0f14;
   margin: 0;
-  padding-bottom: 50px;
-  background-image: url("https://images.unsplash.com/photo-1527430253228-e93688616381?auto=format&fit=crop&w=1200&q=60");
+  padding-bottom: 60px;
+
+  /* خلفية برمجية فخمة جداً */
+  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80");
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
+  background-position: center;
 }
 
-/* ===== HEADER ===== */
+/* ===========================
+      HEADER
+   =========================== */
 header {
-  background: rgba(13, 27, 42, 0.92);
-  color: #fff;
-  padding: 45px 20px;
+  background: rgba(10, 15, 20, 0.95);
+  padding: 50px 25px;
   text-align: center;
   border-radius: 0 0 20px 20px;
-  margin-bottom: 35px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.25);
+  margin-bottom: 40px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
 
 header h1 {
-  font-weight: 700;
-  text-shadow: 0 3px 8px rgba(0,0,0,0.35);
+  color: #e8edf2;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* ===== SECTION TITLES ===== */
+/* ===========================
+      SECTION TITLES
+   =========================== */
 h2 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   margin-bottom: 20px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #e8edf2;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 h2::before {
   content: "";
-  background-image: url("https://cdn-icons-png.flaticon.com/512/2985/2985150.png");
-  width: 28px;
-  height: 28px;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/906/906334.png");
+  width: 30px;
+  height: 30px;
   background-size: cover;
+  filter: brightness(0.8);
 }
 
-/* ===== TOPIC / REPLY CARDS ===== */
+/* ===========================
+      TOPIC + REPLY CARDS
+   =========================== */
 .topic, 
 .reply {
-  background: #fff;
+  background: rgba(20, 25, 32, 0.92);
   padding: 25px;
   border-radius: 18px;
   margin-bottom: 22px;
-  border-left: 6px solid #4a90e2;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border-left: 6px solid #4ab0ff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   position: relative;
   overflow: hidden;
 }
 
-/* TOPIC illustration */
-.topic::after {
+/* خلفية صور برمجية خفيفة داخل الكارد */
+.topic::after,
+.reply::after {
   content: "";
-  background-image: url("https://cdn-icons-png.flaticon.com/512/1995/1995574.png");
-  background-size: 110px;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/2305/2305890.png");
+  background-size: 120px;
   background-repeat: no-repeat;
-  opacity: 0.09;
+  opacity: 0.08;
   width: 150px;
   height: 150px;
   position: absolute;
@@ -71,100 +88,109 @@ h2::before {
   bottom: 15px;
 }
 
-/* REPLY illustration */
-.reply::after {
-  content: "";
-  background-image: url("https://cdn-icons-png.flaticon.com/512/2462/2462719.png");
-  background-size: 100px;
-  opacity: 0.09;
-  width: 140px;
-  height: 140px;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+/* نص الكارد */
+.topic p,
+.reply p,
+.topic footer,
+.reply footer {
+  color: #d0d7df;
 }
 
-/* ===== FIELDS & FORMS ===== */
+/* عنوان الموضوع */
+.topic h3 a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.topic h3 a:hover {
+  color: #4ab0ff;
+  text-decoration: underline;
+}
+
+/* ===========================
+      FORMS
+   =========================== */
 fieldset {
-  background: #fff;
+  background: rgba(20, 25, 32, 0.92);
   padding: 25px;
   border-radius: 16px;
-  border: 1px solid #d9d9d9;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #263040;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 legend {
+  color: #c8d2de;
   font-weight: 600;
-  color: #1b263b;
+  font-size: 1.1rem;
 }
 
-input, textarea {
+label {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+input,
+textarea {
   width: 100%;
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #3b4958;
+  background-color: #11161c;
+  color: #e8edf2;
   font-size: 15px;
-  background-color: #fdfdfd;
-  transition: 0.2s ease-in-out;
+  margin-top: 6px;
+  margin-bottom: 18px;
 }
 
 input:focus,
 textarea:focus {
-  border-color: #4a90e2;
+  border-color: #4ab0ff;
   outline: none;
-  box-shadow: 0 0 6px rgba(74,144,226,0.4);
+  box-shadow: 0 0 8px rgba(74,176,255,0.5);
 }
 
-/* ===== BUTTONS ===== */
+/* ===========================
+      BUTTONS
+   =========================== */
 button,
 .edit-button,
 .delete-button {
-  padding: 10px 16px;
+  padding: 10px 18px;
   border-radius: 10px;
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.25s ease;
 }
 
 button:hover,
 .edit-button:hover,
 .delete-button:hover {
-  transform: scale(1.07);
+  transform: scale(1.08);
 }
 
+/* main button */
 button {
-  background-color: #1b63c3;
-  color: #fff;
+  background-color: #4ab0ff;
+  color: #0c1116;
 }
 
+/* edit */
 .edit-button {
-  background-color: #4a90e2;
-  color: white;
+  background-color: #3a7bd5;
+  color: #ffffff;
   text-decoration: none;
 }
 
+/* delete */
 .delete-button {
-  background-color: #d64545;
+  background-color: #d63447;
   color: white;
   text-decoration: none;
 }
 
-/* reply-only delete button */
+/* reply delete button only */
 .reply-actions button {
-  background-color: #d64545;
-}
-
-/* ===== TOPIC LINKS ===== */
-.topic h3 a {
-  color: #0d1b2a;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.topic h3 a:hover {
-  color: #4a90e2;
-  text-decoration: underline;
+  background-color: #d63447;
 }
