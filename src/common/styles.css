@@ -1,196 +1,133 @@
-/* ===========================
-   GLOBAL PAGE DESIGN - DARK THEME
-   =========================== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+/* === FONT === */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
 
+/* === GLOBAL === */
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0a0f14;
-  margin: 0;
-  padding-bottom: 60px;
-
-  /* خلفية برمجية فخمة جداً */
-  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80");
-  background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-position: center;
+    font-family: 'JetBrains Mono', monospace;
+    background-color: #0b0f19;
+    color: #e5e9f0;
+    margin: 0;
+    padding-bottom: 50px;
+    background-image: url('https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
-/* ===========================
-      HEADER
-   =========================== */
+/* === OVERLAY FOR DARK GLASS EFFECT === */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(10, 10, 20, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: -1;
+}
+
+/* === HEADER === */
 header {
-  background: rgba(10, 15, 20, 0.95);
-  padding: 50px 25px;
-  text-align: center;
-  border-radius: 0 0 20px 20px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: #7dd3fc;
+    padding: 35px 20px;
+    text-align: center;
+    border-bottom: 3px solid #0ea5e9;
+    box-shadow: 0 4px 25px rgba(0, 178, 255, 0.25);
 }
 
-header h1 {
-  color: #e8edf2;
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+h1, h2 {
+    font-weight: 700;
+    color: #38bdf8;
 }
 
-/* ===========================
-      SECTION TITLES
-   =========================== */
-h2 {
-  font-size: 1.7rem;
-  margin-bottom: 20px;
-  font-weight: 700;
-  color: #e8edf2;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* === SECTIONS === */
+section {
+    margin-bottom: 40px;
 }
 
-h2::before {
-  content: "";
-  background-image: url("https://cdn-icons-png.flaticon.com/512/906/906334.png");
-  width: 30px;
-  height: 30px;
-  background-size: cover;
-  filter: brightness(0.8);
+/* === TOPIC & REPLY CARDS === */
+.topic, .reply {
+    background: rgba(30, 41, 59, 0.7);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border-left: 5px solid #0ea5e9;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.12);
+    transition: transform 0.1s ease;
 }
 
-/* ===========================
-      TOPIC + REPLY CARDS
-   =========================== */
-.topic, 
-.reply {
-  background: rgba(20, 25, 32, 0.92);
-  padding: 25px;
-  border-radius: 18px;
-  margin-bottom: 22px;
-  border-left: 6px solid #4ab0ff;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  position: relative;
-  overflow: hidden;
+.topic:hover, .reply:hover {
+    transform: translateX(4px);
 }
 
-/* خلفية صور برمجية خفيفة داخل الكارد */
-.topic::after,
-.reply::after {
-  content: "";
-  background-image: url("https://cdn-icons-png.flaticon.com/512/2305/2305890.png");
-  background-size: 120px;
-  background-repeat: no-repeat;
-  opacity: 0.08;
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
-}
-
-/* نص الكارد */
-.topic p,
-.reply p,
-.topic footer,
-.reply footer {
-  color: #d0d7df;
-}
-
-/* عنوان الموضوع */
-.topic h3 a {
-  color: #ffffff;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.topic h3 a:hover {
-  color: #4ab0ff;
-  text-decoration: underline;
-}
-
-/* ===========================
-      FORMS
-   =========================== */
+/* === FIELDSET === */
 fieldset {
-  background: rgba(20, 25, 32, 0.92);
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #263040;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    background: rgba(30, 30, 40, 0.7);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.07);
 }
 
-legend {
-  color: #c8d2de;
-  font-weight: 600;
-  font-size: 1.1rem;
+/* === INPUTS === */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #64748b;
+    background: #0f172a;
+    color: #e5e7eb;
 }
 
-label {
-  color: #cbd5e1;
-  font-weight: 500;
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 8px #3b82f6;
 }
 
-input,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #3b4958;
-  background-color: #11161c;
-  color: #e8edf2;
-  font-size: 15px;
-  margin-top: 6px;
-  margin-bottom: 18px;
+/* === BUTTONS === */
+button, .edit-button, .delete-button {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-input:focus,
-textarea:focus {
-  border-color: #4ab0ff;
-  outline: none;
-  box-shadow: 0 0 8px rgba(74,176,255,0.5);
+/* Neon Blue Button */
+.edit-button, button[type="submit"] {
+    background-color: #0284c7;
+    color: white;
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.6);
 }
 
-/* ===========================
-      BUTTONS
-   =========================== */
-button,
-.edit-button,
+.edit-button:hover, button[type="submit"]:hover {
+    background-color: #0ea5e9;
+}
+
+/* Red Danger */
 .delete-button {
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.25s ease;
+    background-color: #dc2626;
+    color: white;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
 }
-
-button:hover,
-.edit-button:hover,
 .delete-button:hover {
-  transform: scale(1.08);
+    background-color: #ef4444;
 }
 
-/* main button */
-button {
-  background-color: #4ab0ff;
-  color: #0c1116;
-}
-
-/* edit */
-.edit-button {
-  background-color: #3a7bd5;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-/* delete */
-.delete-button {
-  background-color: #d63447;
-  color: white;
-  text-decoration: none;
-}
-
-/* reply delete button only */
+/* === TOPIC ACTIONS === */
+.topic-actions a,
 .reply-actions button {
-  background-color: #d63447;
+    margin-right: 10px;
+}
+
+/* === LINK COLOR === */
+a {
+    color: #7dd3fc;
+}
+a:hover {
+    color: #38bdf8;
 }
