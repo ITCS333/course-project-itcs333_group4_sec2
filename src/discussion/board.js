@@ -17,8 +17,10 @@ let topics = [];
 
 // --- Element Selections ---
 // TODO: Select the new topic form ('#new-topic-form').
+const newTopicForm = document.getElementById('new-topic-form');
 
 // TODO: Select the topic list container ('#topic-list-container').
+const topicListContainer = document.getElementById('topic-list-container');
 
 // --- Functions ---
 
@@ -32,7 +34,48 @@ let topics = [];
  * - The "Delete" button should have a class "delete-btn" and `data-id="${id}"`.
  */
 function createTopicArticle(topic) {
-  // ... your implementation here ...
+const { id, subject, author, date } = topic;
+
+const article = document.createElement('article');
+article.classList.add('topic');
+
+const h3=document.createElement('h3');
+const link=document.createElement('a');
+link.href=`topic.html?id=${id}`;
+link.textContent=subject;
+h3.appendChild(link);
+
+const footer=document.createElement('footer');
+const p=document.createElement('p');
+p.textContent=`Posted by ${author} on ${date}`;
+footer.appendChild(p);
+
+//acions Divs ** 
+
+const actions=document.createElement('div');
+actions.classList.add('topic-actions');
+
+const editBtn=document.createElement('a');
+editBtn.href='edit-topic.html';
+editBtn.textContent='Edit';
+editBtn.classList.add('edit-button');
+
+const deleteBtn=document.createElement('a');
+deleteBtn.href='#';
+deleteBtn.textContent='Delete';
+deleteBtn.classList.add('delete-btn');
+deleteBtn.dataset.id=id;
+
+actions.appendChild(editBtn);
+actions.appendChild(deleteBtn);
+
+
+//atricle 
+article.appendChild(h3);
+article.appendChild(footer);
+article.appendChild(actions);
+
+return article;
 }
 
 /**
@@ -44,7 +87,12 @@ function createTopicArticle(topic) {
  * append the resulting <article> to `topicListContainer`.
  */
 function renderTopics() {
-  // ... your implementation here ...
+  topicListContainer.innerHTML = '';
+
+  topics.forEach(topic => {
+    const article = createTopicArticle(topic);
+    topicListContainer.appendChild(article);
+  });
 }
 
 /**
@@ -66,8 +114,23 @@ function renderTopics() {
  * 6. Reset the form.
  */
 function handleCreateTopic(event) {
-  // ... your implementation here ...
-}
+event.preventDefault();
+
+const subjectInput = document.getElementById('topic-subject').value;
+const messageInput = document.getElementById('topic-message').value;
+
+const newTopic = {
+  id: `topic_${Date.now()}`,
+  subject: subjectInput,
+  message: messageInput,
+  author: 'Student',
+  date: new Date().toISOString().split('T')[0]
+};
+
+topics.push(newTopic);
+renderTopics();
+newTopicForm.reset();
+} 
 
 /**
  * TODO: Implement the handleTopicListClick function.
@@ -80,7 +143,13 @@ function handleCreateTopic(event) {
  * 4. Call `renderTopics()` to refresh the list.
  */
 function handleTopicListClick(event) {
-  // ... your implementation here ...
+if (event.target.classList.contains('delete-btn')) {
+  const id=event.target.dataset.id;
+
+  topics=topics.filter(topic=>topic.id!==id);
+  renderTopics(); 
+
+}
 }
 
 /**
@@ -94,7 +163,11 @@ function handleTopicListClick(event) {
  * 5. Add the 'click' event listener to `topicListContainer` (calls `handleTopicListClick`).
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
+const response = await fetch('topics.json');
+topics = await response.json();
+renderTopics();
+newTopicForm.addEventListener('submit', handleCreateTopic);
+topicListContainer.addEventListener('click', handleTopicListClick);
 }
 
 // --- Initial Page Load ---
