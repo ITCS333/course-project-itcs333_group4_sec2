@@ -114,7 +114,6 @@ function handleAddWeek(event) {
     .value.split("\n")
     .map((link) => link.trim())
     .filter((link) => link !== ""); // remove empty lines
-
   // 4. Create a new week object with a unique ID
   const newWeek = {
     id: `week_${Date.now()}`,
@@ -123,13 +122,10 @@ function handleAddWeek(event) {
     description: description,
     links: links,
   };
-
   // 5. Add this new week object to the global weeks array
   weeks.push(newWeek);
-
   // 6. Call renderTable() to refresh the list
   renderTable();
-
   // 7. Reset the form
   weekForm.reset();
 }
@@ -146,11 +142,16 @@ function handleAddWeek(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ... 
+  // 1. Check if the clicked element has the class "delete-btn"
   const target = event.target;
   if (target.classList.contains("delete-btn")) {
+    // 2. Get the data-id attribute from the button
     const id = target.getAttribute("data-id");
+    // 3. Update the global weeks array by filtering out the matching week
     weeks = weeks.filter((week) => week.id !== id);
+    // 4. Call renderTable() to refresh the list
     renderTable();
+  }
 }
 
 /**
@@ -165,6 +166,28 @@ function handleTableClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
+  try {
+    // 1. Use fetch() to get data from 'weeks.json'
+    const response = await fetch("weeks.json");
+
+    // 2. Parse the JSON response and store in the global weeks array
+    if (response.ok) {
+      weeks = await response.json();
+    } else {
+      weeks = [];
+    }
+  } catch (error) {
+    weeks = [];
+  }
+  // 3. Call renderTable() to populate the table for the first time
+  renderTable();
+
+  // 4. Add 'submit' event listener to weekForm
+  weekForm.addEventListener("submit", handleAddWeek);
+
+  // 5. Add 'click' event listener to weeksTableBody
+  weeksTableBody.addEventListener("click", handleTableClick);
+}
 }
 
 // --- Initial Page Load ---
