@@ -100,6 +100,8 @@ function renderTable() {
  */
 function handleAddWeek(event) {
   // ... your implementation here ...
+ 
+  }
 }
 
 /**
@@ -113,7 +115,12 @@ function handleAddWeek(event) {
  * 4. Call `renderTable()` to refresh the list.
  */
 function handleTableClick(event) {
-  // ... your implementation here ...
+  // ... your implementation here ... 
+  const target = event.target;
+  if (target.classList.contains("delete-btn")) {
+    const id = target.getAttribute("data-id");
+    weeks = weeks.filter((week) => week.id !== id);
+    renderTable();
 }
 
 /**
