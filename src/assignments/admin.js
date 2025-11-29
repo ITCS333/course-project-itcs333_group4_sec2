@@ -11,14 +11,13 @@ const assignmentsTableBody = document.querySelector("#assignments-tbody");
 function createAssignmentRow(assignment) {
     const tr = document.createElement("tr");
 
-    tr.innerHTML = `
-        <td>${assignment.title}</td>
-        <td>${assignment.dueDate}</td>
-        <td>
-            <button class="edit-btn" data-id="${assignment.id}">Edit</button>
-            <button class="delete-btn" data-id="${assignment.id}">Delete</button>
-        </td>
-    `;
+    tr.innerHTML =
+        "<td>" + assignment.title + "</td>" +
+        "<td>" + assignment.dueDate + "</td>" +
+        "<td>" +
+            "<button class='edit-btn' data-id='" + assignment.id + "'>Edit</button>" +
+            "<button class='delete-btn' data-id='" + assignment.id + "'>Delete</button>" +
+        "</td>";
 
     return tr;
 }
@@ -26,7 +25,7 @@ function createAssignmentRow(assignment) {
 // Render the table
 function renderTable() {
     assignmentsTableBody.innerHTML = "";
-    assignments.forEach(assignment => {
+    assignments.forEach(function (assignment) {
         const row = createAssignmentRow(assignment);
         assignmentsTableBody.appendChild(row);
     });
@@ -40,9 +39,9 @@ function handleAddAssignment(event) {
     const dueDate = assignmentForm.querySelector("#due-date").value;
 
     const newAssignment = {
-        id: `asg_${Date.now()}`,
-        title,
-        dueDate
+        id: "asg_" + Date.now(),
+        title: title,
+        dueDate: dueDate
     };
 
     assignments.push(newAssignment);
@@ -54,7 +53,9 @@ function handleAddAssignment(event) {
 function handleTableClick(event) {
     if (event.target.classList.contains("delete-btn")) {
         const id = event.target.dataset.id;
-        assignments = assignments.filter(asg => asg.id !== id);
+        assignments = assignments.filter(function (asg) {
+            return asg.id !== id;
+        });
         renderTable();
     }
 }
