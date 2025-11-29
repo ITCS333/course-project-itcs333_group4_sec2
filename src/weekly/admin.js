@@ -100,8 +100,38 @@ function renderTable() {
  */
 function handleAddWeek(event) {
   // ... your implementation here ...
- 
-  }
+ // 1. Prevent the form's default submission
+  event.preventDefault();
+
+  // 2. Get values from the inputs
+  const title = document.querySelector("#week-title").value.trim();
+  const startDate = document.querySelector("#week-start-date").value;
+  const description = document.querySelector("#week-description").value.trim();
+
+  // 3. Get value from 'week-links' textarea and split by newlines
+  const links = document
+    .querySelector("#week-links")
+    .value.split("\n")
+    .map((link) => link.trim())
+    .filter((link) => link !== ""); // remove empty lines
+
+  // 4. Create a new week object with a unique ID
+  const newWeek = {
+    id: `week_${Date.now()}`,
+    title: title,
+    startDate: startDate,
+    description: description,
+    links: links,
+  };
+
+  // 5. Add this new week object to the global weeks array
+  weeks.push(newWeek);
+
+  // 6. Call renderTable() to refresh the list
+  renderTable();
+
+  // 7. Reset the form
+  weekForm.reset();
 }
 
 /**
