@@ -1,6 +1,5 @@
 <!--
   Requirement: Create the Student View for Assignments
-
   Instructions:
   This page is a read-only view for students to see all course assignments.
   Each assignment should link to its dedicated detail page.
@@ -8,35 +7,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- TODO: Add meta tags for charset and viewport. -->
-    
-    <!-- TODO: Add a title, e.g., "Course Assignments". -->
-
-    <!-- TODO: Link to your CSS framework or stylesheet. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Assignments</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #fdf2f7; 
+            color: #444444;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #6a1b9a; 
+        }
+        main {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        article {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        article h2 {
+            margin-top: 0;
+            color: #6a1b9a; 
+        }
+        article p {
+            color: #444444; 
+        }
+        article a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #e380bd; 
+            text-decoration: none;
+            font-weight: bold;
+        }
+        article a:hover {
+            color: #c2185b; 
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- TODO: Create a 'header' with a main heading ('h1') "Course Assignments". -->
+    <header>
+        <h1>Course Assignments</h1>
+    </header>
 
-    <!-- TODO: Create the 'main' content area. -->
-        <!-- TODO: Create a 'section' to contain the list of assignments. -->
-            <!-- TODO: Add 2-3 dummy assignment entries using the structure below. -->
+    <main>
+        <section>
+            <!-- Assignment 1 -->
+            <article>
+                <h2>Assignment 1: HTML Basics</h2>
+                <p>Due: 2025-12-01</p>
+                <p>Introduction to HTML structure, elements, and basic formatting.</p>
+                <a href="assignment-detail.html?id=1">View Details & Discussion</a>
+            </article>
 
-            <!-- Example Assignment 1: -->
-            <!-- TODO: Use an 'article' element for each assignment. -->
-                <!-- TODO: Add a heading ('h2') for the assignment's title (e.g., "Assignment 1: HTML Basics"). -->
-                <!-- TODO: Add a paragraph ('p') to display the due date, e.g., "Due: YYYY-MM-DD". -->
-                <!-- TODO: Add another paragraph ('p') for a brief description. -->
-                <!-- TODO: Add an anchor tag ('a') that links to the detail page. 
-                     - For now, the 'href' can be "assignment-detail.html".
-                     - The link text should be "View Details & Discussion". -->
-            <!-- End of article. -->
+            <!-- Assignment 2 -->
+            <article>
+                <h2>Assignment 2: CSS Styling</h2>
+                <p>Due: 2025-12-08</p>
+                <p>Learn how to style HTML elements using CSS, including colors, fonts, and layouts.</p>
+                <a href="assignment-detail.html?id=2">View Details & Discussion</a>
+            </article>
 
-            <!-- Example Assignment 2: -->
-            <!-- TODO: Create a second 'article' for another assignment with the same structure. -->
-
-        <!-- End of assignment list section. -->
-    <!-- End of main. -->
+            <!-- Assignment 3 -->
+            <article>
+                <h2>Assignment 3: JavaScript Basics</h2>
+                <p>Due: 2025-12-15</p>
+                <p>Introduction to JavaScript syntax, variables, functions, and DOM manipulation.</p>
+                <a href="assignment-detail.html?id=3">View Details & Discussion</a>
+            </article>
+        </section>
+    </main>
 
 </body>
 </html>
