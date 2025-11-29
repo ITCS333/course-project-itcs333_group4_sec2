@@ -188,7 +188,6 @@ async function loadAndInitialize() {
   // 5. Add 'click' event listener to weeksTableBody
   weeksTableBody.addEventListener("click", handleTableClick);
 }
-}
 
 // --- Initial Page Load ---
 // Call the main async function to start the application.
