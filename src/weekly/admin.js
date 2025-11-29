@@ -37,7 +37,35 @@ const weeksTableBody = document.querySelector("#weeks-tbody");
 function createWeekRow(week) {
   // ... your implementation here ...
   const tr = document.createElement("tr");
+  // Title td
+  const tdTitle = document.createElement("td");
+  tdTitle.textContent = week.title;
+  tr.appendChild(tdTitle);
 
+  // Description td
+  const tdDescription = document.createElement("td");
+  tdDescription.textContent = week.description;
+  tr.appendChild(tdDescription);
+
+  // Actions td
+  const tdActions = document.createElement("td");
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.className = "edit-btn";
+  editBtn.setAttribute("data-id", week.id);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.className = "delete-btn";
+  deleteBtn.setAttribute("data-id", week.id);
+
+  tdActions.appendChild(editBtn);
+  tdActions.appendChild(deleteBtn);
+
+  tr.appendChild(tdActions);
+
+  return tr;
 }
 
 /**
@@ -50,6 +78,11 @@ function createWeekRow(week) {
  */
 function renderTable() {
   // ... your implementation here ...
+  weeksTableBody.innerHTML = "";
+  weeks.forEach((week) => {
+    const row = createWeekRow(week);
+    weeksTableBody.appendChild(row);
+  });
 }
 
 /**
