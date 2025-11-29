@@ -41,9 +41,8 @@ const newCommentText = document.querySelector("#new-comment-text");
  * 2. Use the `URLSearchParams` object to get the value of the 'id' parameter.
  * 3. Return the id.
  */
-function getWeekIdFromURL() {
   // ... your implementation here ...
-  function getWeekIdFromURL() {
+function getWeekIdFromURL() {
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
   const id = params.get("id");
@@ -165,6 +164,46 @@ function handleAddComment(event) {
  */
 async function initializePage() {
   // ... your implementation here ...
+  // 1. Get week ID
+  currentWeekId = getWeekIdFromURL();
+
+  // 2. If no ID found
+  if (!currentWeekId) {
+    weekTitle.textContent = "Week not found.";
+    return;
+  }
+
+  try {
+    // 3. Fetch both JSON files
+    const [weeksRes, commentsRes] = await Promise.all([
+      fetch("weeks.json"),
+      fetch("comments.json")
+    ]);
+
+    // 4. Parse JSON
+    const weeksData = await weeksRes.json();
+    const commentsData = await commentsRes.json();
+
+    // 5. Find the correct week
+    const selectedWeek = weeksData.find(w => w.id === currentWeekId);
+
+    // 6. Get comments for that week
+    currentComments = commentsData[currentWeekId] || [];
+
+    // 7. If found → render
+    if (selectedWeek) {
+      renderWeekDetails(selectedWeek);
+      renderComments();
+      commentForm.addEventListener("submit", handleAddComment);
+    } else {
+      // 8. Week not found
+      weekTitle.textContent = "Week not found.";
+    }
+
+  } catch (error) {
+    weekTitle.textContent = "Error loading data.";
+    console.error(error);
+  }
 }
 
 // --- Initial Page Load ---
