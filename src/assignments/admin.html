@@ -1,82 +1,115 @@
-<!--
-  Requirement: Create the Admin View for Assignments
-
-  Instructions:
-  Fill in the HTML elements as described in the comments.
-  This page allows the teacher (admin) to perform full CRUD operations on course assignments.
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
-    
-    <!-- TODO: Add the responsive 'viewport' meta tag. -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Assignments</title>
+    <link rel="stylesheet" href="https://unpkg.com/picocss@1.*/css/pico.min.css" />
+    <style>
+      
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-add:hover {
+            background-color: #1e7e34;
+        }
 
-    <!-- TODO: Add a title, e.g., "Manage Assignments". -->
+        .btn-edit {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
 
-    <!-- TODO: Link to your CSS framework or stylesheet. -->
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #a71d2a;
+        }
+
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Manage Assignments</h1>
+    </header>
 
-    <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Assignments". -->
+    <main>
+        <!-- Form Section -->
+        <section>
+            <h2>Add a New Assignment</h2>
+            <form id="assignment-form" action="#">
+                <fieldset>
+                    <legend>Assignment Details</legend>
 
-    <!-- TODO: Create the 'main' content area. -->
+                    <label for="assignment-title">Title</label>
+                    <input id="assignment-title" type="text" required />
 
-        <!-- Section 1: Add/Edit Assignment Form -->
-        <!-- TODO: Create a 'section' for the form. -->
-            <!-- TODO: Add a sub-heading ('h2') "Add a New Assignment". -->
+                    <label for="assignment-description">Description</label>
+                    <textarea id="assignment-description" rows="5" required></textarea>
 
-            <!-- TODO: Create a 'form' with an id "assignment-form". Action can be '#'. -->
-                <!-- TODO: Use a 'fieldset' to group the form controls. -->
-                    <!-- TODO: Add a 'legend', e.g., "Assignment Details". -->
+                    <label for="assignment-due-date">Due Date</label>
+                    <input id="assignment-due-date" type="date" required />
 
-                    <!-- TODO: Add a 'label' and 'input' for the assignment title.
-                         - label 'for': "assignment-title"
-                         - input 'id': "assignment-title", type="text", required -->
+                    <label for="assignment-files">Attached Files/Links (one per line)</label>
+                    <textarea id="assignment-files" rows="3"></textarea>
 
-                    <!-- TODO: Add a 'label' and 'textarea' for the description.
-                         - label 'for': "assignment-description"
-                         - textarea 'id': "assignment-description", rows="5", required -->
+                    <button id="add-assignment" type="submit" class="btn-add">Add Assignment</button>
+                </fieldset>
+            </form>
+        </section>
 
-                    <!-- TODO: Add a 'label' and 'input' for the due date.
-                         - label 'for': "assignment-due-date"
-                         - input 'id': "assignment-due-date", type="date", required -->
-                    
-                    <!-- TODO: Add a 'label' and 'textarea' for attached files or links (one per line).
-                         - label 'for': "assignment-files"
-                         - textarea 'id': "assignment-files", rows="3" -->
-
-                    <!-- TODO: Add a 'button' to submit the form.
-                         - id="add-assignment", type="submit", Text: "Add Assignment" -->
-                <!-- End of fieldset. -->
-            <!-- End of form. -->
-        <!-- End of form section. -->
-
-
-        <!-- Section 2: Existing Assignments List -->
-        <!-- TODO: Create a 'section' to display the list of current assignments. -->
-            <!-- TODO: Add a sub-heading ('h2') "Current Assignments". -->
-
-            <!-- TODO: Create a 'table' with id "assignments-table". -->
-                <!-- TODO: Create a 'thead' and a 'tr' inside it. -->
-                    <!-- TODO: Add 'th' elements for "Title", "Due Date", and "Actions". -->
-                
-                <!-- TODO: Create a 'tbody' for the data. -->
-                    <!-- TODO: Add 1-2 rows of dummy data to see the structure. -->
-                    <!-- Example Row 1: -->
-                    <!-- TODO: Create a 'tr' for the first assignment. -->
-                        <!-- TODO: Add 'td' cells for a title (e.g., "HTML Basics") and a due date. -->
-                        
-                        <!-- TODO: Add a 'td' containing the action buttons. -->
-                            <!-- TODO: Add an "Edit" button. -->
-                            <!-- TODO: Add a "Delete" button. -->
-                        <!-- End of actions 'td'. -->
-                    <!-- End of the row. -->
-
-                <!-- End of tbody. -->
-            <!-- End of table. -->
-        <!-- End of list section. -->
-
-    <!-- End of main. -->
+        <!-- Table Section -->
+        <section>
+            <h2>Current Assignments</h2>
+            <table id="assignments-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML Basics</td>
+                        <td>2025-12-05</td>
+                        <td>
+                            <button class="btn-edit">Edit</button>
+                            <button class="btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>CSS Fundamentals</td>
+                        <td>2025-12-12</td>
+                        <td>
+                            <button class="btn-edit">Edit</button>
+                            <button class="btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
 </body>
 </html>
