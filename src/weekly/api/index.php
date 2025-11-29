@@ -408,6 +408,96 @@ function updateWeek($db, $data) {
     // TODO: Check if update was successful
     // If yes, return success response with updated week data
     // If no, return error response with 500 status
+    try {
+        // --- Validate that week_id is provided ---
+        if (empty($data['week_id'])) {
+            sendError("Missing week_id to update", 400);
+            return;
+        }
+
+        $week_id = sanitizeInput($data['week_id']);
+
+        // --- Check if week exists ---
+        $checkSql = "SELECT * FROM weeks WHERE week_id = :week_id LIMIT 1";
+        $stmt = $db->prepare($checkSql);
+        $stmt->bindParam(':week_id', $week_id);
+        $stmt->execute();
+        $existingWeek = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$existingWeek) {
+            sendError("Week not found", 404);
+            return;
+        }
+
+        // --- Build UPDATE query dynamically ---
+        $fields = [];
+        $values = [];
+
+        if (isset($data['title'])) {
+            $fields[] = "title = ?";
+            $values[] = sanitizeInput($data['title']);
+        }
+
+        if (isset($data['start_date'])) {
+            $start_date = sanitizeInput($data['start_date']);
+            if (!validateDate($start_date)) {
+                sendError("Invalid start_date format. Expected YYYY-MM-DD", 400);
+                return;
+            }
+            $fields[] = "start_date = ?";
+            $values[] = $start_date;
+        }
+
+        if (isset($data['description'])) {
+            $fields[] = "description = ?";
+            $values[] = sanitizeInput($data['description']);
+        }
+
+        if (isset($data['links']) && is_array($data['links'])) {
+            $fields[] = "links = ?";
+            $values[] = json_encode($data['links']);
+        }
+
+        if (empty($fields)) {
+            sendError("No fields provided to update", 400);
+            return;
+        }
+
+        // Add updated_at timestamp
+        $fields[] = "updated_at = CURRENT_TIMESTAMP";
+
+        // --- Complete UPDATE query ---
+        $sql = "UPDATE weeks SET " . implode(", ", $fields) . " WHERE week_id = ?";
+        $stmt = $db->prepare($sql);
+
+        // --- Bind dynamic parameters ---
+        foreach ($values as $i => $val) {
+            $stmt->bindValue($i + 1, $val); // PDO 1-based indexing for bindValue
+        }
+        $stmt->bindValue(count($values) + 1, $week_id);
+
+        // --- Execute query ---
+        if ($stmt->execute()) {
+            // Return updated week data
+            // Merge existing fields with updated values
+            $updatedWeek = $existingWeek;
+            foreach ($data as $key => $val) {
+                if ($key === 'links' && is_array($val)) {
+                    $updatedWeek['links'] = $val;
+                } elseif ($key !== 'week_id') {
+                    $updatedWeek[$key] = $val;
+                }
+            }
+            sendResponse(['success' => true, 'data' => $updatedWeek]);
+        } else {
+            sendError("Failed to update week", 500);
+        }
+
+    } catch (PDOException $e) {
+        sendError("Database error occurred", 500);
+    } catch (Exception $e) {
+        sendError("An error occurred", 500);
+    }
 }
 
 
@@ -443,6 +533,60 @@ function deleteWeek($db, $weekId) {
     // TODO: Check if delete was successful
     // If yes, return success response with message indicating week and comments deleted
     // If no, return error response with 500 status
+    try {
+        // --- Validate week_id ---
+        if (empty($weekId)) {
+            sendError("Missing week_id to delete", 400);
+            return;
+        }
+
+        $weekId = sanitizeInput($weekId);
+
+        // --- Check if week exists ---
+        $checkSql = "SELECT * FROM weeks WHERE week_id = :week_id LIMIT 1";
+        $stmt = $db->prepare($checkSql);
+        $stmt->bindParam(':week_id', $weekId);
+        $stmt->execute();
+        $existingWeek = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$existingWeek) {
+            sendError("Week not found", 404);
+            return;
+        }
+
+        // --- Begin transaction to ensure atomic deletion ---
+        $db->beginTransaction();
+
+        // --- Delete associated comments first ---
+        $deleteCommentsSql = "DELETE FROM comments WHERE week_id = ?";
+        $stmtComments = $db->prepare($deleteCommentsSql);
+        $stmtComments->execute([$weekId]);
+
+        // --- Delete the week ---
+        $deleteWeekSql = "DELETE FROM weeks WHERE week_id = ?";
+        $stmtWeek = $db->prepare($deleteWeekSql);
+        $stmtWeek->execute([$weekId]);
+
+        // --- Commit transaction ---
+        $db->commit();
+
+        sendResponse([
+            'success' => true,
+            'message' => "Week '$weekId' and its associated comments have been deleted."
+        ]);
+
+    } catch (PDOException $e) {
+        // Rollback transaction on error
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
+        sendError("Database error occurred", 500);
+    } catch (Exception $e) {
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
+        sendError("An error occurred", 500);
+    }
 }
 
 
