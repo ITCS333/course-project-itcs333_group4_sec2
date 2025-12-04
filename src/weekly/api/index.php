@@ -61,9 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Assume the Database class has a method getConnection() that returns a PDO instance
 // Example: require_once '../config/Database.php';
 require_once '../config/Database.php';
-$database = new Database();
-$db = $database->getConnection();
-
 // TODO: Get the PDO database connection
 // Example: $database = new Database();
 //          $db = $database->getConnection();
@@ -607,6 +604,7 @@ function getCommentsByWeek($db, $weekId) {
     // If not, return error response with 400 status
     if (empty($weekId)) {
         sendError("week_id is required", 400);
+        return;
     // TODO: Prepare SQL query to select comments for the week
     // SELECT id, week_id, author, text, created_at FROM comments WHERE week_id = ? ORDER BY created_at ASC
     $sql = "SELECT id, week_id, author, text, created_at 
@@ -642,28 +640,65 @@ function createComment($db, $data) {
     // TODO: Validate required fields
     // Check if week_id, author, and text are provided
     // If any field is missing, return error response with 400 status
-    
+    try {
+        if (empty($data['week_id']) || empty($data['author']) || empty($data['text'])) {
+            sendError("Missing required fields: week_id, author, text", 400);
+            return;
+        }
     // TODO: Sanitize input data
     // Trim whitespace from all fields
-    
+    $week_id = sanitizeInput($data['week_id']);
+    $author = sanitizeInput($data['author']);
+    $text = sanitizeInput($data['text']);
     // TODO: Validate that text is not empty after trimming
     // If empty, return error response with 400 status
-    
+    if (trim($text) === '') {
+            sendError("Comment text cannot be empty", 400);
+            return;
+        }
     // TODO: Check if the week exists
     // Prepare and execute a SELECT query on weeks table
     // If week not found, return error response with 404 status
-    
+    $checkWeekSql = "SELECT week_id FROM weeks WHERE week_id = :week_id LIMIT 1";
+        $stmt = $db->prepare($checkWeekSql);
+        $stmt->bindParam(':week_id', $week_id);
+        $stmt->execute();
+        if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+            sendError("Week not found", 404);
+            return;
+        }
     // TODO: Prepare INSERT query
     // INSERT INTO comments (week_id, author, text) VALUES (?, ?, ?)
-    
     // TODO: Bind parameters
-    
+    $insertSql = "INSERT INTO comments (week_id, author, text, created_at) 
+                      VALUES (:week_id, :author, :text, CURRENT_TIMESTAMP)";
+    $stmt = $db->prepare($insertSql);
+    $stmt->bindParam(':week_id', $week_id);
+    $stmt->bindParam(':author', $author);
+    $stmt->bindParam(':text', $text);
     // TODO: Execute the query
-    
     // TODO: Check if insert was successful
     // If yes, get the last insert ID and return success response with 201 status
     // Include the new comment data in the response
     // If no, return error response with 500 status
+    if ($stmt->execute()) {
+            $newCommentId = $db->lastInsertId();
+            $newComment = [
+                'id' => (int)$newCommentId,
+                'week_id' => $week_id,
+                'author' => $author,
+                'text' => $text
+            ];
+            sendResponse(['success' => true, 'data' => $newComment], 201);
+        } else {
+            sendError("Failed to create comment", 500);
+        }
+
+    } catch (PDOException $e) {
+        sendError("Database error occurred", 500);
+    } catch (Exception $e) {
+        sendError("An error occurred", 500);
+    }
 }
 
 
@@ -680,6 +715,7 @@ function deleteComment($db, $commentId) {
     // If not, return error response with 400 status
     if (empty($commentId)) {
         sendError("Comment ID is required", 400);
+        return;
     }
     // TODO: Check if comment exists
     // Prepare and execute a SELECT query
@@ -753,6 +789,7 @@ try {
             $weekId = $_GET['week_id'] ?? ($data['week_id'] ?? null);
             if (empty($weekId)) {
                 sendError("week_id is required for deletion", 400);
+                return;
             }
             deleteWeek($db, $weekId);
         } else {
@@ -770,6 +807,7 @@ try {
             // Call getCommentsByWeek()
             if (empty($_GET['week_id'])) {
                 sendError("week_id is required", 400);
+                return;
             }
 
             getCommentsByWeek($db, $_GET['week_id']);
@@ -783,6 +821,7 @@ try {
             $commentId = $_GET['id'] ?? ($data['id'] ?? null);
             if (empty($commentId)) {
                 sendError("comment id is required for deletion", 400);
+                return;
             }
             deleteComment($db, $commentId);
             
