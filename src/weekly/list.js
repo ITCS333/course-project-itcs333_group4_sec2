@@ -25,7 +25,6 @@ const listSection = document.querySelector('#week-list-section');
  * (This is how the detail page will know which week to load).
  */
 function createWeekArticle(week) {
-  // ... your implementation here ...
   const article = document.createElement("article");
 
   const h2 = document.createElement("h2");
@@ -61,9 +60,8 @@ function createWeekArticle(week) {
  * - Append the returned <article> element to `listSection`.
  */
 async function loadWeeks() {
-  // ... your implementation here ...
   // 1. Fetch weeks.json
-  const response = await fetch('weeks.json');
+  const response = await fetch('api/weeks.json');
 
   // 2. Parse JSON into array
   const weeks = await response.json();
