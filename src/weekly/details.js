@@ -41,7 +41,6 @@ const newCommentText = document.querySelector("#new-comment-text");
  * 2. Use the `URLSearchParams` object to get the value of the 'id' parameter.
  * 3. Return the id.
  */
-  // ... your implementation here ...
 function getWeekIdFromURL() {
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
@@ -61,7 +60,6 @@ function getWeekIdFromURL() {
  * should both be the link URL.
  */
 function renderWeekDetails(week) {
-  // ... your implementation here ...
   weekTitle.textContent = week.title;
   weekStartDate.textContent = "Starts on: " + week.startDate;
   weekDescription.textContent = week.description;
@@ -84,7 +82,6 @@ function renderWeekDetails(week) {
  * (e.g., an <article> containing a <p> and a <footer>).
  */
 function createCommentArticle(comment) {
-  // ... your implementation here ...
   const article = document.createElement("article");
 
   const p = document.createElement("p");
@@ -108,7 +105,6 @@ function createCommentArticle(comment) {
  * append the resulting <article> to `commentList`.
  */
 function renderComments() {
-  // ... your implementation here ...
   commentList.innerHTML = "";
   currentComments.forEach(comment => {
     const article = createCommentArticle(comment);
@@ -130,15 +126,14 @@ function renderComments() {
  * 7. Clear the `newCommentText` textarea.
  */
 function handleAddComment(event) {
-  // ... your implementation here ...
-   event.preventDefault();
+  event.preventDefault();
 
-  const commentText  = newCommentText.value.trim();
-  if (!commentText ) return;
+  const commentText = newCommentText.value.trim();
+  if (!commentText) return;
 
   const newComment = {
     author: "Student",
-    text: commentText 
+    text: commentText
   };
   currentComments.push(newComment);
   renderComments();
@@ -151,7 +146,7 @@ function handleAddComment(event) {
  * It should:
  * 1. Get the `currentWeekId` by calling `getWeekIdFromURL()`.
  * 2. If no ID is found, set `weekTitle.textContent = "Week not found."` and stop.
- * 3. `fetch` both 'weeks.json' and 'week-comments.json' (you can use `Promise.all`).
+ * 3. `fetch` both 'weeks.json' and 'comments.json' (you can use `Promise.all`).
  * 4. Parse both JSON responses.
  * 5. Find the correct week from the weeks array using the `currentWeekId`.
  * 6. Get the correct comments array from the comments object using the `currentWeekId`.
@@ -163,7 +158,6 @@ function handleAddComment(event) {
  * 8. If the week is not found, display an error in `weekTitle`.
  */
 async function initializePage() {
-  // ... your implementation here ...
   // 1. Get week ID
   currentWeekId = getWeekIdFromURL();
 
@@ -176,8 +170,8 @@ async function initializePage() {
   try {
     // 3. Fetch both JSON files
     const [weeksRes, commentsRes] = await Promise.all([
-      fetch("weeks.json"),
-      fetch("comments.json")
+      fetch("api/weeks.json"),
+      fetch("api/comments.json")
     ]);
 
     // 4. Parse JSON
