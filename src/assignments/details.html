@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>📋 Assignment Details</h1>
+        <h1> Assignment Details</h1>
     </header>
 
     <main class="container">
@@ -63,7 +63,7 @@
     </main>
 
     <script>
-        // JavaScript to handle form submission
+        // JavaScript to handle form submission WITHOUT page jump
         document.getElementById('comment-form').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent page refresh
             
@@ -71,7 +71,7 @@
             
             if (commentText.trim() === '') {
                 alert('Please write a comment first');
-                return;
+                return false;
             }
             
             // Create new comment element
@@ -81,13 +81,17 @@
                 <footer><small>Posted by: You</small></footer>
             `;
             
-            // Add new comment to the container
-            document.getElementById('comments-container').appendChild(newComment);
+            // Add new comment to the container (at the TOP)
+            document.getElementById('comments-container').prepend(newComment);
             
             // Clear the form
             document.getElementById('new-comment').value = '';
             
-           
+            // Keep focus on textarea for next comment
+            document.getElementById('new-comment').focus();
+            
+            // Prevent any default behavior
+            return false;
         });
         
         // Safe back button function
@@ -104,28 +108,26 @@
             }
         }
         
-            // Check if back link works
-            const backLink = document.querySelector('a[href="admin.html"]');
-            if (backLink) {
-                backLink.addEventListener('click', function(e) {
-                    // Try to prevent issues
-                    console.log('Attempting to navigate to admin page...');
-                });
-            }
-            
-            // Add backup button
-            const backupBtn = document.createElement('button');
-            backupBtn.textContent = '← Safe Back';
-            backupBtn.className = 'secondary outline';
-            backupBtn.style.marginLeft = '10px';
-            backupBtn.onclick = goBackSafe;
-            
-            // Add after original button
-            const originalBtn = document.querySelector('a[href="admin.html"]');
-            if (originalBtn) {
-                originalBtn.parentNode.insertBefore(backupBtn, originalBtn.nextSibling);
-            }
-        });
+        // Check if back link works
+        const backLink = document.querySelector('a[href="admin.html"]');
+        if (backLink) {
+            backLink.addEventListener('click', function(e) {
+                console.log('Navigating to admin page...');
+            });
+        }
+        
+        // Add backup button
+        const backupBtn = document.createElement('button');
+        backupBtn.textContent = '← Safe Back';
+        backupBtn.className = 'secondary outline';
+        backupBtn.style.marginLeft = '10px';
+        backupBtn.onclick = goBackSafe;
+        
+        // Add after original button
+        const originalBtn = document.querySelector('a[href="admin.html"]');
+        if (originalBtn) {
+            originalBtn.parentNode.insertBefore(backupBtn, originalBtn.nextSibling);
+        }
     </script>
 </body>
 </html>
