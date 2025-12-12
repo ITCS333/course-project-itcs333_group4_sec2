@@ -35,8 +35,8 @@ const weeksTableBody = document.querySelector("#weeks-tbody");
  * - A "Delete" button with class "delete-btn" and `data-id="${id}"`.
  */
 function createWeekRow(week) {
-  // ... your implementation here ...
   const tr = document.createElement("tr");
+  
   // Title td
   const tdTitle = document.createElement("td");
   tdTitle.textContent = week.title;
@@ -54,13 +54,12 @@ function createWeekRow(week) {
   editBtn.textContent = "Edit";
   editBtn.className = "edit-btn";
   editBtn.setAttribute("data-id", week.id);
+  tdActions.appendChild(editBtn);
 
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Delete";
   deleteBtn.className = "delete-btn";
   deleteBtn.setAttribute("data-id", week.id);
-
-  tdActions.appendChild(editBtn);
   tdActions.appendChild(deleteBtn);
 
   tr.appendChild(tdActions);
@@ -77,7 +76,6 @@ function createWeekRow(week) {
  * append the resulting <tr> to `weeksTableBody`.
  */
 function renderTable() {
-  // ... your implementation here ...
   weeksTableBody.innerHTML = "";
   weeks.forEach((week) => {
     const row = createWeekRow(week);
@@ -99,8 +97,7 @@ function renderTable() {
  * 7. Reset the form.
  */
 function handleAddWeek(event) {
-  // ... your implementation here ...
- // 1. Prevent the form's default submission
+  // 1. Prevent the form's default submission
   event.preventDefault();
 
   // 2. Get values from the inputs
@@ -114,6 +111,7 @@ function handleAddWeek(event) {
     .value.split("\n")
     .map((link) => link.trim())
     .filter((link) => link !== ""); // remove empty lines
+
   // 4. Create a new week object with a unique ID
   const newWeek = {
     id: `week_${Date.now()}`,
@@ -122,10 +120,22 @@ function handleAddWeek(event) {
     description: description,
     links: links,
   };
+
   // 5. Add this new week object to the global weeks array
-  weeks.push(newWeek);
+if (weekForm.dataset.editId) {
+    const id = weekForm.dataset.editId;
+    const index = weeks.findIndex((w) => w.id === id);
+
+    weeks[index] = { ...weeks[index], ...newWeek, id };
+
+    delete weekForm.dataset.editId;
+    document.querySelector("#add-week").textContent = "Add Week";
+} else {
+    weeks.push(newWeek);
+}
   // 6. Call renderTable() to refresh the list
   renderTable();
+
   // 7. Reset the form
   weekForm.reset();
 }
@@ -141,7 +151,6 @@ function handleAddWeek(event) {
  * 4. Call `renderTable()` to refresh the list.
  */
 function handleTableClick(event) {
-  // ... your implementation here ... 
   // 1. Check if the clicked element has the class "delete-btn"
   const target = event.target;
   if (target.classList.contains("delete-btn")) {
@@ -152,6 +161,20 @@ function handleTableClick(event) {
     // 4. Call renderTable() to refresh the list
     renderTable();
   }
+  if (target.classList.contains("edit-btn")) {
+    const id = target.getAttribute("data-id");
+    const week = weeks.find((w) => w.id === id);
+
+    document.querySelector("#week-title").value = week.title;
+    document.querySelector("#week-start-date").value = week.startDate;
+    document.querySelector("#week-description").value = week.description;
+    document.querySelector("#week-links").value = week.links.join("\n");
+
+    // mark form as editing
+    weekForm.dataset.editId = id;
+
+    document.querySelector("#add-week").textContent = "Update Week";
+}
 }
 
 /**
@@ -165,10 +188,9 @@ function handleTableClick(event) {
  * 5. Add the 'click' event listener to `weeksTableBody` (calls `handleTableClick`).
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
   try {
     // 1. Use fetch() to get data from 'weeks.json'
-    const response = await fetch("weeks.json");
+    const response = await fetch("api/weeks.json");
 
     // 2. Parse the JSON response and store in the global weeks array
     if (response.ok) {
@@ -179,6 +201,7 @@ async function loadAndInitialize() {
   } catch (error) {
     weeks = [];
   }
+
   // 3. Call renderTable() to populate the table for the first time
   renderTable();
 
