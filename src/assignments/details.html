@@ -1,11 +1,4 @@
-<!--
-  Requirement: Create the Dedicated Page for a Single Assignment
-
-  Instructions:
-  This page displays the full details for one assignment and allows for discussion.
--->
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -94,8 +87,7 @@
             // Clear the form
             document.getElementById('new-comment').value = '';
             
-            // Optional: Scroll to new comment
-            newComment.scrollIntoView({ behavior: 'smooth' });
+           
         });
         
         // Safe back button function
@@ -112,8 +104,6 @@
             }
         }
         
-        // Add safe back button if needed
-        document.addEventListener('DOMContentLoaded', function() {
             // Check if back link works
             const backLink = document.querySelector('a[href="admin.html"]');
             if (backLink) {
@@ -139,8 +129,3 @@
     </script>
 </body>
 </html>
-                <!-- End of fieldset. -->
-            <!-- End of form. -->
-        <!-- End of discussion section. -->
-
-    <!-- End of main. -->
