@@ -1,115 +1,71 @@
-<!DOCTYPE html>
+<!-- Requirement: Create the Admin View for Assignments
+  Instructions:
+  Fill in the HTML elements as described in the comments.
+  This page allows the teacher (admin) to perform full CRUD operations on course assignments.
+-->
+  <!DOCTYPE html>
 <html lang="en">
+    
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage Assignments</title>
-    <link rel="stylesheet" href="https://unpkg.com/picocss@1.*/css/pico.min.css" />
-    <style>
-      
-        .btn-add {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-add:hover {
-            background-color: #1e7e34;
-        }
-
-        .btn-edit {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-edit:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-delete:hover {
-            background-color: #a71d2a;
-        }
-
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        td, th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Manage Assignments</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 </head>
+
+    
 <body>
-    <header>
-        <h1>Manage Assignments</h1>
-    </header>
+  <header>
+    <h1>📚 Admin – Manage Assignments</h1>
+  </header>
 
-    <main>
-        <!-- Form Section -->
-        <section>
-            <h2>Add a New Assignment</h2>
-            <form id="assignment-form" action="#">
-                <fieldset>
-                    <legend>Assignment Details</legend>
+  <main class="container">
+    
+    <article>
+      <h2>Add New Assignment</h2>
+        
+      <form id="assignment-form">
+        <label>Title
+          <input type="text" id="title" required>
+        </label>
+        <label>Description
+          <textarea id="description" required></textarea>
+        </label>
+        <label>Due Date
+          <input type="date" id="due-date" required>
+        </label>
+        <label>Upload Files
+          <input type="file" id="files" multiple>
+        </label>
+        <button type="submit">Add Assignment</button>
+      </form>
+    </article>
 
-                    <label for="assignment-title">Title</label>
-                    <input id="assignment-title" type="text" required />
+    <hr>
 
-                    <label for="assignment-description">Description</label>
-                    <textarea id="assignment-description" rows="5" required></textarea>
+        <h2>Assignments List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="assignments-tbody"></tbody>
+    </table>
 
-                    <label for="assignment-due-date">Due Date</label>
-                    <input id="assignment-due-date" type="date" required />
+    <hr>
 
-                    <label for="assignment-files">Attached Files/Links (one per line)</label>
-                    <textarea id="assignment-files" rows="3"></textarea>
+    <h2>Comments</h2>
+    <div id="comments-section">
+      <p>Select an assignment to view comments.</p>
+    </div>
+  </main>
 
-                    <button id="add-assignment" type="submit" class="btn-add">Add Assignment</button>
-                </fieldset>
-            </form>
-        </section>
-
-        <!-- Table Section -->
-        <section>
-            <h2>Current Assignments</h2>
-            <table id="assignments-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Due Date</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>HTML Basics</td>
-                        <td>2025-12-05</td>
-                        <td>
-                            <button class="btn-edit">Edit</button>
-                            <button class="btn-delete">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>CSS Fundamentals</td>
-                        <td>2025-12-12</td>
-                        <td>
-                            <button class="btn-edit">Edit</button>
-                            <button class="btn-delete">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
+  <script src="admin.js" defer></script>
 </body>
 </html>
+
+
+
