@@ -5,99 +5,138 @@
   This page displays the full details for one assignment and allows for discussion.
 -->
 
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assignment Details</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 </head>
 <body>
-  <header>
-    <h1>📋 Assignment Details</h1>
-  </header>
+    <header>
+        <h1>📋 Assignment Details</h1>
+    </header>
 
-  <main class="container">
-    <!-- Back button -->
-    <a href="admin.html" role="button" class="secondary">← Back to Assignments</a>
+    <main class="container">
+        <!-- Back button -->
+        <a href="admin.html" role="button" class="secondary">← Back to Assignments</a>
 
-    <!-- Assignment Info -->
-    <article>
-      <h2>Assignment 1: HTML Basics</h2>
-      <p><strong>Due:</strong> 2025-11-10</p>
-      
-      <h3>Description</h3>
-      <p>Create a semantic HTML structure for a personal portfolio. Focus on using tags like &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;article&gt;, and &lt;footer&gt; to build a clean and accessible layout.</p>
-      
-      <h3>Files</h3>
-      <ul>
-        <li><a href="#">assignment-brief.pdf</a></li>
-        <li><a href="#">portfolio-examples.zip</a></li>
-      </ul>
-    </article>
-
-    <hr>
-
-    <!-- Discussion -->
-    <section id="discussion-section">
-      <h2>Questions & Discussion</h2>
-      
-      <!-- Existing Comments Container -->
-      <div id="comments-container">
+        <!-- Assignment Info -->
         <article>
-          <p>Is it okay to use a 'section' inside an 'article'?</p>
-          <footer><small>Posted by: Jane Smith</small></footer>
+            <h2>Assignment 1: HTML Basics</h2>
+            <p><strong>Due:</strong> 2025-11-10</p>
+            
+            <h3>Description</h3>
+            <p>Create a semantic HTML structure for a personal portfolio. Focus on using tags like &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;article&gt;, and &lt;footer&gt; to build a clean and accessible layout.</p>
+            
+            <h3>Files</h3>
+            <ul>
+                <li><a href="#" onclick="return false;">assignment-brief.pdf</a></li>
+                <li><a href="#" onclick="return false;">portfolio-examples.zip</a></li>
+            </ul>
         </article>
+
+        <hr>
+
+        <!-- Discussion -->
+        <section id="discussion-section">
+            <h2>Questions & Discussion</h2>
+            
+            <!-- Existing Comments Container -->
+            <div id="comments-container">
+                <article>
+                    <p>Is it okay to use a 'section' inside an 'article'?</p>
+                    <footer><small>Posted by: Jane Smith</small></footer>
+                </article>
+                
+                <article>
+                    <p>Do we need to add a navigation bar even if the page is small?</p>
+                    <footer><small>Posted by: Omar Ali</small></footer>
+                </article>
+            </div>
+
+            <!-- New Comment Form -->
+            <form id="comment-form">
+                <fieldset>
+                    <legend>Ask a Question</legend>
+                    <label>Your Comment
+                        <textarea id="new-comment" rows="4" required></textarea>
+                    </label>
+                    <button type="submit">Post Comment</button>
+                </fieldset>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById('comment-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page refresh
+            
+            const commentText = document.getElementById('new-comment').value;
+            
+            if (commentText.trim() === '') {
+                alert('Please write a comment first');
+                return;
+            }
+            
+            // Create new comment element
+            const newComment = document.createElement('article');
+            newComment.innerHTML = `
+                <p>${commentText}</p>
+                <footer><small>Posted by: You</small></footer>
+            `;
+            
+            // Add new comment to the container
+            document.getElementById('comments-container').appendChild(newComment);
+            
+            // Clear the form
+            document.getElementById('new-comment').value = '';
+            
+            // Optional: Scroll to new comment
+            newComment.scrollIntoView({ behavior: 'smooth' });
+        });
         
-        <article>
-          <p>Do we need to add a navigation bar even if the page is small?</p>
-          <footer><small>Posted by: Omar Ali</small></footer>
-        </article>
-      </div>
-
-      <!-- New Comment Form -->
-      <form id="comment-form">
-        <fieldset>
-          <legend>Ask a Question</legend>
-          <label>Your Comment
-            <textarea id="new-comment" rows="4" required></textarea>
-          </label>
-          <button type="submit">Post Comment</button>
-        </fieldset>
-      </form>
-    </section>
-  </main>
-
-  <script>
-    // JavaScript to handle form submission
-    document.getElementById('comment-form').addEventListener('submit', function(e) {
-      e.preventDefault(); // Prevent page refresh
-      
-      const commentText = document.getElementById('new-comment').value;
-      
-      if (commentText.trim() === '') {
-        alert('Please write a comment first');
-        return;
-      }
-      
-      // Create new comment element
-      const newComment = document.createElement('article');
-      newComment.innerHTML = `
-        <p>${commentText}</p>
-        <footer><small>Posted by: You</small></footer>
-      `;
-      
-      // Add new comment to the container
-      document.getElementById('comments-container').appendChild(newComment);
-      
-      // Clear the form
-      document.getElementById('new-comment').value = '';
-      
-      // Optional: Scroll to new comment
-      newComment.scrollIntoView({ behavior: 'smooth' });
-    });
-  </script>
+        // Safe back button function
+        function goBackSafe() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Try to go to admin page
+                try {
+                    window.location.href = 'admin.html';
+                } catch {
+                    alert('No previous page available.');
+                }
+            }
+        }
+        
+        // Add safe back button if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if back link works
+            const backLink = document.querySelector('a[href="admin.html"]');
+            if (backLink) {
+                backLink.addEventListener('click', function(e) {
+                    // Try to prevent issues
+                    console.log('Attempting to navigate to admin page...');
+                });
+            }
+            
+            // Add backup button
+            const backupBtn = document.createElement('button');
+            backupBtn.textContent = '← Safe Back';
+            backupBtn.className = 'secondary outline';
+            backupBtn.style.marginLeft = '10px';
+            backupBtn.onclick = goBackSafe;
+            
+            // Add after original button
+            const originalBtn = document.querySelector('a[href="admin.html"]');
+            if (originalBtn) {
+                originalBtn.parentNode.insertBefore(backupBtn, originalBtn.nextSibling);
+            }
+        });
+    </script>
 </body>
 </html>
                 <!-- End of fieldset. -->
