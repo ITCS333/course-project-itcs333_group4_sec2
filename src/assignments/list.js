@@ -1,58 +1,124 @@
 
+/*
+  Requirement: Populate the "Course Assignments" list page.
+
+  Instructions:
+  1. Link this file to `list.html` using:
+     <script src="list.js" defer></script>
+
+  2. In `list.html`, add an `id="assignment-list-section"` to the
+     <section> element that will contain the assignment articles.
+
+  3. Implement the TODOs below.
+*/
+
 // --- Element Selections ---
+// TODO: Select the section for the assignment list ('#assignment-list-section').
 const listSection = document.querySelector('#assignment-list-section');
 
 // --- Functions ---
 
-// Create an <article> for one assignment
-function createAssignmentArticle({id, title, dueDate, description}) {
-    const article = document.createElement('article');
+/**
+ * TODO: Implement the createAssignmentArticle function.
+ * It takes one assignment object {id, title, dueDate, description}.
+ * It should return an <article> element matching the structure in `list.html`.
+ * The "View Details" link's `href` MUST be set to `details.html?id=${id}`.
+ * This is how the detail page will know which assignment to load.
+ */
+function createAssignmentArticle(assignment) {
+  // Create article element
+  const article = document.createElement('article');
 
-    // Title
-    const h2 = document.createElement('h2');
-    h2.textContent = title;
+  // Create and add title (h2)
+  const titleElement = document.createElement('h2');
+  titleElement.textContent = assignment.title;
+  article.appendChild(titleElement);
 
-    // Due date
-    const dueP = document.createElement('p');
-    dueP.textContent = `Due: ${dueDate}`;
+  // Create and add due date
+  const dueDateElement = document.createElement('p');
+  dueDateElement.innerHTML = `<strong>Due:</strong> ${assignment.dueDate}`;
+  article.appendChild(dueDateElement);
 
-    // Description
-    const descP = document.createElement('p');
-    descP.textContent = description || "";
+  // Create and add description
+  const descriptionElement = document.createElement('p');
+  descriptionElement.textContent = assignment.description;
+  article.appendChild(descriptionElement);
 
-    // Link to details page
-    const link = document.createElement('a');
-    link.href = `details.html?id=${id}`;
-    link.textContent = "View Details & Discussion";
+  // Create and add "View Details" link
+  const linkElement = document.createElement('a');
+  linkElement.href = `details.html?id=${assignment.id}`;
+  linkElement.textContent = 'View Details & Discussion';
+  linkElement.className = 'secondary';
+  linkElement.setAttribute('role', 'button');
+  article.appendChild(linkElement);
 
-    // Append elements to article
-    article.appendChild(h2);
-    article.appendChild(dueP);
-    article.appendChild(descP);
-    article.appendChild(link);
-
-    return article;
+  return article;
 }
 
-// Load assignments from JSON and display them
+/**
+ * TODO: Implement the loadAssignments function.
+ * This function needs to be 'async'.
+ * It should:
+ * 1. Use `fetch()` to get data from 'assignments.json'.
+ * 2. Parse the JSON response into an array.
+ * 3. Clear any existing content from `listSection`.
+ * 4. Loop through the assignments array. For each assignment:
+ * - Call `createAssignmentArticle()`.
+ * - Append the returned <article> element to `listSection`.
+ */
 async function loadAssignments() {
-    try {
-        const response = await fetch('assignments.json');
-        const assignments = await response.json();
-
-        // Clear existing content
-        listSection.innerHTML = "";
-
-        // Add each assignment to the section
-        assignments.forEach(assignment => {
-            const article = createAssignmentArticle(assignment);
-            listSection.appendChild(article);
-        });
-    } catch (error) {
-        console.error("Error loading assignments:", error);
-        listSection.innerHTML = "<p>Failed to load assignments.</p>";
-    }
+  try {
+    // 1. Use `fetch()` to get data from 'assignments.json'
+    const response = await fetch('assignments.json');
+    
+    // 2. Parse the JSON response into an array
+    const assignments = await response.json();
+    
+    // 3. Clear any existing content from `listSection`
+    listSection.innerHTML = '';
+    
+    // 4. Loop through the assignments array
+    assignments.forEach(assignment => {
+      // Call `createAssignmentArticle()`
+      const article = createAssignmentArticle(assignment);
+      
+      // Append the returned <article> element to `listSection`
+      listSection.appendChild(article);
+    });
+    
+  } catch (error) {
+    console.error('Error loading assignments:', error);
+    
+    // Fallback to hardcoded data if fetch fails
+    const fallbackAssignments = [
+      {
+        id: 'asg_1',
+        title: 'Assignment 1: HTML Basics',
+        dueDate: '2025-12-01',
+        description: 'Introduction to HTML structure, elements, and basic formatting.'
+      },
+      {
+        id: 'asg_2',
+        title: 'Assignment 2: CSS Styling',
+        dueDate: '2025-12-08',
+        description: 'Learn how to style HTML elements using CSS, including colors, fonts, and layouts.'
+      },
+      {
+        id: 'asg_3',
+        title: 'Assignment 3: JavaScript Basics',
+        dueDate: '2025-12-15',
+        description: 'Introduction to JavaScript syntax, variables, functions, and DOM manipulation.'
+      }
+    ];
+    
+    listSection.innerHTML = '';
+    fallbackAssignments.forEach(assignment => {
+      const article = createAssignmentArticle(assignment);
+      listSection.appendChild(article);
+    });
+  }
 }
 
 // --- Initial Page Load ---
+// Call the function to populate the page.
 loadAssignments();
