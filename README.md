@@ -13,7 +13,7 @@
 |     | **Task 1:** Homepage, Admin Portal & User Management | 
 |      | **Task 2:** Course Resources | 
 | Fatima Ahmed | **Task 3:** Weekly Breakdown + (login.js part in authentication)|
-| Mariam Sharif      | **Task 4:** Assignments | 
+| Mariam Sharif      | **Task 4:** Assignments + (login.html part in authentication) | 
 | Al-Anood Ali AlQadhi    | **Task 5:** General Discussion Boards+index.php (api) in authentication  | 
 
 ## A link to your live, hosted application on Replit.
