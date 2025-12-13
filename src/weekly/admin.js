@@ -161,19 +161,18 @@ function handleTableClick(event) {
     // 4. Call renderTable() to refresh the list
     renderTable();
   }
+ 
   if (target.classList.contains("edit-btn")) {
-    const id = target.getAttribute("data-id");
-    const week = weeks.find((w) => w.id === id);
-
+  const id = target.getAttribute("data-id");
+  const week = weeks.find(w => w.id === id);
+  if (week) {
     document.querySelector("#week-title").value = week.title;
     document.querySelector("#week-start-date").value = week.startDate;
     document.querySelector("#week-description").value = week.description;
     document.querySelector("#week-links").value = week.links.join("\n");
-
-    // mark form as editing
     weekForm.dataset.editId = id;
-
-    document.querySelector("#add-week").textContent = "Update Week";
+    document.querySelector("#add-week").textContent = "Update Week";  // Assuming button has id="add-week"
+  }
 }
 }
 
