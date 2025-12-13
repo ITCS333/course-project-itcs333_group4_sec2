@@ -105,7 +105,8 @@ tr:hover {
 }
 
 /* Action Buttons */
-.action-button {
+.edit-btn{ 
+    background-color: #fbbf24;
     display: inline-block;
     padding: 7px 14px;
     margin-right: 5px;
@@ -118,20 +119,19 @@ tr:hover {
     transition: all 0.2s;
 }
 
-.action-button:first-child {
-    background-color: #fbbf24;
-}
-
-.action-button:first-child:hover {
-    background-color: #f59e0b;
-}
-
-.action-button:last-child {
-    background-color: #dc2626;
-}
-
-.action-button:last-child:hover {
+.delete-btn {
     background-color: #b91c1c;
+    display: inline-block;
+    padding: 7px 14px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+    transition: all 0.2s;
+
 }
 
 /* =======================
