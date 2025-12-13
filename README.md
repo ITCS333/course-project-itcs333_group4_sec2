@@ -14,6 +14,6 @@
 |      | **Task 2:** Course Resources | 
 | Fatima Ahmed | **Task 3:** Weekly Breakdown + (login.js part in authentication)|
 | Mariam Sharif      | **Task 4:** Assignments | 
-| Al-Anood Ali AlQadhi    | **Task 5:** General Discussion Boards | 
+| Al-Anood Ali AlQadhi    | **Task 5:** General Discussion Boards+index.php (api) in authentication  | 
 
 ## A link to your live, hosted application on Replit.
