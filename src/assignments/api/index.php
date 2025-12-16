@@ -54,17 +54,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // ============================================================================
+// SESSION START
+// ============================================================================
+session_start();
+
+// ============================================================================
 // DATABASE CONNECTION
 // ============================================================================
 
 // Include the database connection class
 require_once 'db.php';
 
-// Create database connection
-$db = new PDO("mysql:host=localhost;dbname=assignments_db;charset=utf8", "username", "password");
+try {
+    // Create database connection
+    $db = new PDO("mysql:host=localhost;dbname=assignments_db;charset=utf8", "username", "password");
 
-// Set PDO to throw exceptions on errors
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Set PDO to throw exceptions on errors
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+    exit();
+}
+
+// ============================================================================
+// SESSION INITIALIZATION
+// ============================================================================
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['user_id'] = 1;
+    $_SESSION['username'] = 'test_user';
+    $_SESSION['role'] = 'student';
+}
 
 // ============================================================================
 // REQUEST PARSING
@@ -84,184 +105,214 @@ $queryParams = $_GET;
 // ============================================================================
 
 function getAllAssignments($db) {
-    $sql = "SELECT * FROM assignments WHERE 1";
-    
-    $params = [];
-    if (!empty($_GET['search'])) {
-        $sql .= " AND (title LIKE :search OR description LIKE :search)";
-        $params[':search'] = "%" . $_GET['search'] . "%";
+    try {
+        $sql = "SELECT * FROM assignments WHERE 1";
+        
+        $params = [];
+        if (!empty($_GET['search'])) {
+            $sql .= " AND (title LIKE :search OR description LIKE :search)";
+            $params[':search'] = "%" . $_GET['search'] . "%";
+        }
+        
+        $allowedSort = ['title', 'due_date', 'created_at'];
+        $sort = $_GET['sort'] ?? 'created_at';
+        $order = strtolower($_GET['order'] ?? 'asc');
+        
+        if (!in_array($sort, $allowedSort)) $sort = 'created_at';
+        if (!in_array($order, ['asc','desc'])) $order = 'asc';
+        
+        $sql .= " ORDER BY $sort $order";
+        
+        $stmt = $db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($results as &$assignment) {
+            $assignment['files'] = json_decode($assignment['files'] ?? '[]', true);
+        }
+        
+        echo json_encode($results);
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
-    
-    $allowedSort = ['title', 'due_date', 'created_at'];
-    $sort = $_GET['sort'] ?? 'created_at';
-    $order = strtolower($_GET['order'] ?? 'asc');
-    
-    if (!in_array($sort, $allowedSort)) $sort = 'created_at';
-    if (!in_array($order, ['asc','desc'])) $order = 'asc';
-    
-    $sql .= " ORDER BY $sort $order";
-    
-    $stmt = $db->prepare($sql);
-    
-    foreach ($params as $key => $value) {
-        $stmt->bindValue($key, $value);
-    }
-    
-    $stmt->execute();
-    
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    foreach ($results as &$assignment) {
-        $assignment['files'] = json_decode($assignment['files'] ?? '[]', true);
-    }
-    
-    echo json_encode($results);
 }
 
 function getAssignmentById($db, $assignmentId) {
-    if (empty($assignmentId)) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Assignment ID required']);
-        exit();
+    try {
+        if (empty($assignmentId)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Assignment ID required']);
+            exit();
+        }
+        
+        $stmt = $db->prepare("SELECT * FROM assignments WHERE id=:id");
+        $stmt->bindValue(':id', $assignmentId, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $assignment = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$assignment) {
+            http_response_code(404);
+            echo json_encode(['error'=>'Assignment not found']);
+            exit();
+        }
+        
+        $assignment['files'] = json_decode($assignment['files'] ?? '[]', true);
+        echo json_encode($assignment);
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
-    
-    $stmt = $db->prepare("SELECT * FROM assignments WHERE id=:id");
-    $stmt->bindValue(':id', $assignmentId, PDO::PARAM_INT);
-    $stmt->execute();
-    
-    $assignment = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$assignment) {
-        http_response_code(404);
-        echo json_encode(['error'=>'Assignment not found']);
-        exit();
-    }
-    
-    $assignment['files'] = json_decode($assignment['files'] ?? '[]', true);
-    echo json_encode($assignment);
 }
 
 function createAssignment($db, $data) {
-    if (empty($data['title']) || empty($data['description']) || empty($data['due_date'])) {
-        http_response_code(400);
-        echo json_encode(['error'=>'title, description, due_date required']);
-        exit();
-    }
-    
-    $title = htmlspecialchars(trim($data['title']));
-    $desc = htmlspecialchars(trim($data['description']));
-    $due = $data['due_date'];
-    
-    $dateObj = DateTime::createFromFormat('Y-m-d', $due);
-    if (!$dateObj || $dateObj->format('Y-m-d') !== $due) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Invalid due_date']);
-        exit();
-    }
-    
-    $files = !empty($data['files']) ? json_encode($data['files']) : json_encode([]);
-    
-    $stmt = $db->prepare("INSERT INTO assignments (title, description, due_date, files, created_at, updated_at) VALUES (:title,:desc,:due,:files,NOW(),NOW())");
-    $stmt->bindValue(':title', $title);
-    $stmt->bindValue(':desc', $desc);
-    $stmt->bindValue(':due', $due);
-    $stmt->bindValue(':files', $files);
-    
-    if ($stmt->execute()) {
-        $id = $db->lastInsertId();
-        echo json_encode(['success'=>true,'id'=>$id]);
-    } else {
-        http_response_code(500);
-        echo json_encode(['error'=>'Insert failed']);
-    }
-}
-
-function updateAssignment($db, $data) {
-    if (empty($data['id'])) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Assignment ID required']);
-        exit();
-    }
-    
-    $id = $data['id'];
-    
-    $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
-    $stmtCheck->bindValue(':id', $id);
-    $stmtCheck->execute();
-    
-    if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
-        http_response_code(404);
-        echo json_encode(['error'=>'Assignment not found']);
-        exit();
-    }
-    
-    $fields = [];
-    if (!empty($data['title'])) $fields['title'] = htmlspecialchars(trim($data['title']));
-    if (!empty($data['description'])) $fields['description'] = htmlspecialchars(trim($data['description']));
-    if (!empty($data['due_date'])) {
+    try {
+        if (empty($data['title']) || empty($data['description']) || empty($data['due_date'])) {
+            http_response_code(400);
+            echo json_encode(['error'=>'title, description, due_date required']);
+            exit();
+        }
+        
+        $title = htmlspecialchars(trim($data['title']));
+        $desc = htmlspecialchars(trim($data['description']));
         $due = $data['due_date'];
+        
         $dateObj = DateTime::createFromFormat('Y-m-d', $due);
         if (!$dateObj || $dateObj->format('Y-m-d') !== $due) {
             http_response_code(400);
             echo json_encode(['error'=>'Invalid due_date']);
             exit();
         }
-        $fields['due_date'] = $due;
-    }
-    if (!empty($data['files'])) $fields['files'] = json_encode($data['files']);
-    
-    if (empty($fields)) {
-        http_response_code(400);
-        echo json_encode(['error'=>'No fields to update']);
-        exit();
-    }
-    
-    $sql = "UPDATE assignments SET ";
-    $sqlParts = [];
-    foreach ($fields as $key=>$val) $sqlParts[] = "$key=:$key";
-    $sql .= implode(",", $sqlParts) . ", updated_at=NOW() WHERE id=:id";
-    
-    $stmt = $db->prepare($sql);
-    foreach ($fields as $key=>$val) $stmt->bindValue(":$key",$val);
-    $stmt->bindValue(":id",$id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['success'=>true]);
-    } else {
+        
+        $files = !empty($data['files']) ? json_encode($data['files']) : json_encode([]);
+        
+        $stmt = $db->prepare("INSERT INTO assignments (title, description, due_date, files, created_at, updated_at) VALUES (:title,:desc,:due,:files,NOW(),NOW())");
+        $stmt->bindValue(':title', $title);
+        $stmt->bindValue(':desc', $desc);
+        $stmt->bindValue(':due', $due);
+        $stmt->bindValue(':files', $files);
+        
+        if ($stmt->execute()) {
+            $id = $db->lastInsertId();
+            echo json_encode(['success'=>true,'id'=>$id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error'=>'Insert failed']);
+        }
+        
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error'=>'Update failed']);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    }
+}
+
+function updateAssignment($db, $data) {
+    try {
+        if (empty($data['id'])) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Assignment ID required']);
+            exit();
+        }
+        
+        $id = $data['id'];
+        
+        $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
+        $stmtCheck->bindValue(':id', $id);
+        $stmtCheck->execute();
+        
+        if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
+            http_response_code(404);
+            echo json_encode(['error'=>'Assignment not found']);
+            exit();
+        }
+        
+        $fields = [];
+        if (!empty($data['title'])) $fields['title'] = htmlspecialchars(trim($data['title']));
+        if (!empty($data['description'])) $fields['description'] = htmlspecialchars(trim($data['description']));
+        if (!empty($data['due_date'])) {
+            $due = $data['due_date'];
+            $dateObj = DateTime::createFromFormat('Y-m-d', $due);
+            if (!$dateObj || $dateObj->format('Y-m-d') !== $due) {
+                http_response_code(400);
+                echo json_encode(['error'=>'Invalid due_date']);
+                exit();
+            }
+            $fields['due_date'] = $due;
+        }
+        if (!empty($data['files'])) $fields['files'] = json_encode($data['files']);
+        
+        if (empty($fields)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'No fields to update']);
+            exit();
+        }
+        
+        $sql = "UPDATE assignments SET ";
+        $sqlParts = [];
+        foreach ($fields as $key=>$val) $sqlParts[] = "$key=:$key";
+        $sql .= implode(",", $sqlParts) . ", updated_at=NOW() WHERE id=:id";
+        
+        $stmt = $db->prepare($sql);
+        foreach ($fields as $key=>$val) $stmt->bindValue(":$key",$val);
+        $stmt->bindValue(":id",$id);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['success'=>true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error'=>'Update failed']);
+        }
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 }
 
 function deleteAssignment($db, $assignmentId) {
-    if (empty($assignmentId)) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Assignment ID required']);
-        exit();
-    }
-    
-    $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
-    $stmtCheck->bindValue(':id',$assignmentId);
-    $stmtCheck->execute();
-    
-    if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
-        http_response_code(404);
-        echo json_encode(['error'=>'Assignment not found']);
-        exit();
-    }
-    
-    // Delete comments first
-    $stmtDelComments = $db->prepare("DELETE FROM comments WHERE assignment_id=:id");
-    $stmtDelComments->bindValue(':id',$assignmentId);
-    $stmtDelComments->execute();
-    
-    $stmt = $db->prepare("DELETE FROM assignments WHERE id=:id");
-    $stmt->bindValue(':id',$assignmentId);
-    if ($stmt->execute()) {
-        echo json_encode(['success'=>true]);
-    } else {
+    try {
+        if (empty($assignmentId)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Assignment ID required']);
+            exit();
+        }
+        
+        $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
+        $stmtCheck->bindValue(':id',$assignmentId);
+        $stmtCheck->execute();
+        
+        if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
+            http_response_code(404);
+            echo json_encode(['error'=>'Assignment not found']);
+            exit();
+        }
+        
+        // Delete comments first
+        $stmtDelComments = $db->prepare("DELETE FROM comments WHERE assignment_id=:id");
+        $stmtDelComments->bindValue(':id',$assignmentId);
+        $stmtDelComments->execute();
+        
+        $stmt = $db->prepare("DELETE FROM assignments WHERE id=:id");
+        $stmt->bindValue(':id',$assignmentId);
+        if ($stmt->execute()) {
+            echo json_encode(['success'=>true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error'=>'Delete failed']);
+        }
+        
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error'=>'Delete failed']);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 }
 
@@ -270,78 +321,96 @@ function deleteAssignment($db, $assignmentId) {
 // ============================================================================
 
 function getCommentsByAssignment($db, $assignmentId) {
-    if (empty($assignmentId)) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Assignment ID required']);
-        exit();
+    try {
+        if (empty($assignmentId)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Assignment ID required']);
+            exit();
+        }
+        
+        $stmt = $db->prepare("SELECT * FROM comments WHERE assignment_id=:assignment_id");
+        $stmt->bindValue(':assignment_id',$assignmentId);
+        $stmt->execute();
+        
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($results);
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
-    
-    $stmt = $db->prepare("SELECT * FROM comments WHERE assignment_id=:assignment_id");
-    $stmt->bindValue(':assignment_id',$assignmentId);
-    $stmt->execute();
-    
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($results);
 }
 
 function createComment($db, $data) {
-    if (empty($data['assignment_id']) || empty($data['author']) || empty(trim($data['text']))) {
-        http_response_code(400);
-        echo json_encode(['error'=>'assignment_id, author, text required']);
-        exit();
-    }
-    
-    $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
-    $stmtCheck->bindValue(':id',$data['assignment_id']);
-    $stmtCheck->execute();
-    
-    if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
-        http_response_code(404);
-        echo json_encode(['error'=>'Assignment not found']);
-        exit();
-    }
-    
-    $author = htmlspecialchars(trim($data['author']));
-    $text = htmlspecialchars(trim($data['text']));
-    
-    $stmt = $db->prepare("INSERT INTO comments (assignment_id, author, text, created_at) VALUES (:aid,:author,:text,NOW())");
-    $stmt->bindValue(':aid',$data['assignment_id']);
-    $stmt->bindValue(':author',$author);
-    $stmt->bindValue(':text',$text);
-    
-    if ($stmt->execute()) {
-        $id = $db->lastInsertId();
-        echo json_encode(['success'=>true,'id'=>$id]);
-    } else {
+    try {
+        if (empty($data['assignment_id']) || empty($data['author']) || empty(trim($data['text']))) {
+            http_response_code(400);
+            echo json_encode(['error'=>'assignment_id, author, text required']);
+            exit();
+        }
+        
+        $stmtCheck = $db->prepare("SELECT * FROM assignments WHERE id=:id");
+        $stmtCheck->bindValue(':id',$data['assignment_id']);
+        $stmtCheck->execute();
+        
+        if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
+            http_response_code(404);
+            echo json_encode(['error'=>'Assignment not found']);
+            exit();
+        }
+        
+        $author = htmlspecialchars(trim($data['author']));
+        $text = htmlspecialchars(trim($data['text']));
+        
+        $stmt = $db->prepare("INSERT INTO comments (assignment_id, author, text, created_at) VALUES (:aid,:author,:text,NOW())");
+        $stmt->bindValue(':aid',$data['assignment_id']);
+        $stmt->bindValue(':author',$author);
+        $stmt->bindValue(':text',$text);
+        
+        if ($stmt->execute()) {
+            $id = $db->lastInsertId();
+            echo json_encode(['success'=>true,'id'=>$id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error'=>'Insert failed']);
+        }
+        
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error'=>'Insert failed']);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 }
 
 function deleteComment($db, $commentId) {
-    if (empty($commentId)) {
-        http_response_code(400);
-        echo json_encode(['error'=>'Comment ID required']);
-        exit();
-    }
-    
-    $stmtCheck = $db->prepare("SELECT * FROM comments WHERE id=:id");
-    $stmtCheck->bindValue(':id',$commentId);
-    $stmtCheck->execute();
-    
-    if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
-        http_response_code(404);
-        echo json_encode(['error'=>'Comment not found']);
-        exit();
-    }
-    
-    $stmt = $db->prepare("DELETE FROM comments WHERE id=:id");
-    $stmt->bindValue(':id',$commentId);
-    if ($stmt->execute()) {
-        echo json_encode(['success'=>true]);
-    } else {
+    try {
+        if (empty($commentId)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Comment ID required']);
+            exit();
+        }
+        
+        $stmtCheck = $db->prepare("SELECT * FROM comments WHERE id=:id");
+        $stmtCheck->bindValue(':id',$commentId);
+        $stmtCheck->execute();
+        
+        if (!$stmtCheck->fetch(PDO::FETCH_ASSOC)) {
+            http_response_code(404);
+            echo json_encode(['error'=>'Comment not found']);
+            exit();
+        }
+        
+        $stmt = $db->prepare("DELETE FROM comments WHERE id=:id");
+        $stmt->bindValue(':id',$commentId);
+        if ($stmt->execute()) {
+            echo json_encode(['success'=>true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error'=>'Delete failed']);
+        }
+        
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error'=>'Delete failed']);
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 }
 
@@ -371,4 +440,3 @@ function validateAllowedValue($value, $allowedValues) {
     return in_array($value, $allowedValues);
 }
 ?>
-
