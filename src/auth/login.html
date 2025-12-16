@@ -21,87 +21,61 @@ This div will be used to display success or error messages. Example: <div id="me
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100 vh;
-            padding: 1 rem;
+            min-height: 100vh;
+            padding: 1rem;
         }
         
         main {
-            width: 150 %;
-            max-width: 450 px;
+            width: 100%;
+            max-width: 450px;
         }
         
         .login-card {
-            padding: 2 rem;
-            border-radius: 8 px;
-            box-shadow: 0 4 px 6 px #e380bd;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        @media (max-width: 576 px) {
+        @media (max-width: 576px) {
             .login-card {
-                padding: 1.5 rem;
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- This will be the main content area of the page. -->
-    <!-- TODO: Use the 'main' element to contain the login form, as it represents the primary content of the document. -->
+    <!-- Main content area containing the login form -->
     <main>
-        <!-- This 'section' groups the related content of the login form. -->
-        <!-- TODO: Create a 'section' element to act as the login card. -->
+        <!-- Section for the login card -->
         <section class="login-card">
-            <!-- The heading of the login form -->
-            <!-- TODO: Add a heading element (e.g., 'h1' or 'h2') for the form's title. The text should be "Welcome Back!". -->
+            <!-- Form heading -->
             <h2>Welcome Back!</h2>
-            <!-- The form element will wrap all the inputs. -->
-            <!-- TODO: Create a 'form' element. The 'action' can be '#' for now. -->
-            <form action="#">
-                <!-- TODO: Use a 'fieldset' to group all the related controls for the login form. -->
-                <fieldset>
-                    <!-- TODO: Add a 'legend' to caption the fieldset. e.g., "Secure Login". This improves accessibility. -->
-                    <legend>Secure Login</legend>
-                    <!-- TODO: Add a 'label' for the email input field.
-                         The 'for' attribute should be "email".
-                         The text should be "Email Address". -->
-                    <label for="email">Email Address</label>
-                    <!-- TODO: Add an 'input' field for the email.
-                         - The type should be "email".
-                         - The id must be "email".
-                         - It should be a required field. -->
-                    <input type="email" id="email" name="email" required placeholder="Enter your email">
-                    <!-- TODO: Add a 'label' for the password input field.
-                         The 'for' attribute should be "password".
-                         The text should be "Password". -->
-                    <label for="password">Password</label>
-                    <!-- TODO: Add an 'input' field for the password.
-                         - The type should be "password".
-                         - The id must be "password".
-                         - It should be a required field.
-                         - For validation, add a 'minlength' attribute (e.g., minlength="8"). -->
-                    <input type="password" id="password" name="password" required minlength="8" placeholder="Enter your password">
-                    <!-- This is the form submission button. -->
-                    <!-- TODO: Add a 'button' to submit the form, inside the fieldset.
-                         - The type should be "submit".
-                         - The id must be "login".
-                         - The text should be "Log In". -->
-                    <button type="submit" id="login">Log In</button>
-                <!-- End of the fieldset. -->
-                </fieldset>
             
-              <!-- TODO: Add message container div here -->
-                <div id="message-container"></div>
+            <!-- Login form -->
+            <form action="#">
+                <!-- Fieldset grouping all form controls -->
+                <fieldset>
+                    <legend>Secure Login</legend>
+                    
+                    <!-- Email input field -->
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    
+                    <!-- Password input field -->
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="8" placeholder="Enter your password">
+                    
+                    <!-- Submit button -->
+                    <button type="submit" id="login">Log In</button>
+                </fieldset>
                 
+                <!-- Message container div - MUST be inside form, after fieldset, before closing form tag -->
+                <div id="message-container"></div>
             </form>
-            <!-- End of the form element. -->
-        <!-- End of the login section. -->
         </section>
-    <!-- End of the main content area. -->
-
-
-            <!-- End of the main content area. -->
->
     </main>
-<!-- TODO: Add script tag here with defer attribute -->
+    
+    <!-- Script tag with defer attribute - MUST be before closing body tag -->
     <script src="login.js" defer></script>
 </body>
 </html>
