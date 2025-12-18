@@ -49,8 +49,11 @@ session_start();
 // Allow cross-origin requests (CORS) if needed
 // Allow specific HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
 // Allow specific headers (Content-Type, Authorization)
-if (!isset ($_SESSION['initialized'])){
-    $_SESSION['initialized']=true;
+if (!isset ($_SESSION['user'])){
+    $_SESSION['user']= [
+        'role'=> 'guest',
+        'created_at'=> time() 
+    ];
 }
 header('Content-Type: application/json');   
 header('Access-Control-Allow-Origin: *');
