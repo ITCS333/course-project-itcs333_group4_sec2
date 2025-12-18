@@ -163,9 +163,16 @@ if (event.target.classList.contains('delete-btn')) {
  * 5. Add the 'click' event listener to `topicListContainer` (calls `handleTopicListClick`).
  */
 async function loadAndInitialize() {
+  try{
 const response = await fetch('topics.json');
 topics = await response.json();
+  }
+catch(error){
+  console.warn('topic.json not loaded , starting with empty list')
+  topics= [];
+}
 renderTopics();
+
 newTopicForm.addEventListener('submit', handleCreateTopic);
 topicListContainer.addEventListener('click', handleTopicListClick);
 }
