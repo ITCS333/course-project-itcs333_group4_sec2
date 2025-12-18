@@ -191,28 +191,31 @@ async function initializePage() {
     topicSubject.textContent = "Topic not found.";
     return;
   }
+  let topicsData=[];
+  let repliesData={};
 
+  try {
   const [topicResponse, repliesResponse] = await Promise.all([
     fetch('topics.json'),
     fetch('replies.json')
   ]); 
 
 
-const topicsData = await topicResponse.json();
-const repliesData = await repliesResponse.json();
+ topicsData = await topicResponse.json();
+ repliesData = await repliesResponse.json();
+} catch(error){
+console.warn('JSON file not loaded , using empty data');
+}
 
 const topic = topicsData.find(t => t.id === currentTopicId);
-currentReplies = repliesData[currentTopicId] || [];
-
-
 if (!topic) {
   topicSubject.textContent = "Topic not found.";
   return;
 }
 
+currentReplies = repliesData[currentTopicId] || [];
 renderOriginalPost(topic);
 renderReplies();
-
 replyForm.addEventListener('submit', handleAddReply);
 replyListContainer.addEventListener('click', handleReplyListClick);
 }
