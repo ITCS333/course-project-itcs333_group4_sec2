@@ -173,7 +173,13 @@ function getCommentsByWeek($weekId) {
 
 function createComment($data) {
     global $pdo;
-    if (!isset($data['week_id'], $data['author'], $data['text'])) sendError('week_id, author, and text are required', 400);
+
+    if (!isset($_SESSION['user_id'])) {
+        sendError('User must be logged in to create comments', 401);
+    }
+
+    if (!isset($data['week_id'], $data['author'], $data['text'])) 
+        sendError('week_id, author, and text are required', 400);
 
     try {
         $stmt = $pdo->prepare("INSERT INTO comments (week_id, author, text, created_at) VALUES (:week_id, :author, :text, :created_at)");
@@ -192,6 +198,7 @@ function createComment($data) {
         sendError($e->getMessage(), 500);
     }
 }
+
 
 function deleteComment($commentId) {
     global $pdo;
