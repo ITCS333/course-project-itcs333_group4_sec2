@@ -5,7 +5,81 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Dev Course Homepage</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #1e3a8a; 
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    max-width: 600px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+nav h2 {
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
+
+nav h3 {
+    margin: 15px 0 10px;
+    color: #1e3a8a;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    margin-bottom: 12px;
+}
+
+nav a {
+    display: block;
+    padding: 10px 15px;
+    background-color: #8ac5df;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+nav a:hover {
+    background-color: #a6d1ea;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 15px;
+        margin: 20px 10px;
+    }
+
+    nav a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+    </style>
+    
 </head>
 
 <body>
@@ -18,21 +92,21 @@
             <h2>Site Navigation</h2>
             <ul>
                 <!-- General -->
-                <li><a href="login.html">Login</a></li>
+                <li><a href="src/auth/login.html">Login</a></li>
 
                 <!-- Admin Pages -->
-                <li><a href="admin_portal.html">Admin Portal (Manage Students)</a></li>
-                <li><a href="admin_resources.html">Admin: Manage Resources</a></li>
-                <li><a href="admin_weekly.html">Admin: Manage Weekly Breakdown</a></li>
-                <li><a href="admin_assignments.html">Admin: Manage Assignments</a></li>
+                <li><a href="src/admin/manage_users.html">Admin Portal (Manage Students)</a></li>
+                <li><a href="src/resources/admin.html">Admin: Manage Resources</a></li>
+                <li><a href="src/weekly/admin.html">Admin: Manage Weekly Breakdown</a></li>
+                <li><a href="src/assignments/admin.html">Admin: Manage Assignments</a></li>
 
                 <!-- Student Pages -->
-                <li><a href="student_resources.html">View Course Resources</a></li>
-                <li><a href="student_weekly.html">View Weekly Breakdown</a></li>
-                <li><a href="student_assignments.html">View Assignments</a></li>
+                <li><a href="src/resources/list.html">View Course Resources</a></li>
+                <li><a href="src/weekly/list.html">View Weekly Breakdown</a></li>
+                <li><a href="src/assignments/list.html">View Assignments</a></li>
 
                 <!-- Discussion -->
-                <li><a href="discussion_board.html">General Discussion Board</a></li>
+                <li><a href="src/discussion/baord.html">General Discussion Board</a></li>
             </ul>
         </nav>
     </main>
